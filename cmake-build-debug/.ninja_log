@@ -1,0 +1,6 @@
+# ninja log v6
+8	639	7843401840951917	CMakeFiles/oopcpp3.dir/main.cpp.obj	ec7182252ac7c35e
+1228	1374	7843404800894212	oopcpp3.exe	b34d7999ce30efa1
+3	396	7845763404991569	build.ninja	6df7fac8ef266bc4
+63	1223	7843404789249045	CMakeFiles/oopcpp3.dir/XO_Classes.cpp.obj	d67c65250cfb8689
+56	1227	7843404789178586	CMakeFiles/oopcpp3.dir/XO_Demo.cpp.obj	60d434ed1017ff38
