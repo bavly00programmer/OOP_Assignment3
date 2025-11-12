@@ -19,6 +19,7 @@ class NUM_Board : public Board<int> {
 private:
     int blank_symbol = 0;
     ///< Character used to represent an empty cell on the board.
+    vector<int> used_numbers;
 
 public:
     /**
@@ -62,6 +63,7 @@ public:
     bool game_is_over(Player<int>* player);
 //to check if number is valid for player
 bool is_valid_number_for_player(int num, player<int>*player);
+vector<int> get_used_numbers() const { return used_numbers;}
 };
 
 
@@ -107,4 +109,5 @@ public:
 };
 
 #endif // NUM.H
+
 
