@@ -10,13 +10,13 @@ using namespace std;
 int getChoice(int mn, int mx) {
     int choice;
     while (true) {
-        cout << "enter choice between (" << mn << " & " << mx << " ) :" << endl;
+        cout << "enter choice between [ " << mn << " , " << mx << " ] :" ;
         if (cin >> choice) {
             if (mn <= choice && choice <= mx) {
                 return choice;
             }
-            cout << "invalid choice" << endl;
-            cout << "try again with number between (" << mn << " & " << mx << " ) :"  << endl;
+            cout << "invalid choice\n";
+            cout << "try again with number between [ " << mn << " , " << mx << " ]\n" ;
 
         } else {
             cout << "Invalid input! Please enter a number\n";
@@ -46,9 +46,8 @@ int display_menu_and_get_choice() {
     cout << "11. Infinity Tic-Tac-Toe\n";
     cout << "0 - Exit Application\n\n";
 
-    cout << "Enter your choice: ";
-
     int choice =getChoice(0,11);
+    cout<<"\n\n";
     return choice;
 }
 
@@ -58,6 +57,7 @@ bool playAgain() {
     cout << "1.Yes\n";
     cout << "2.No\n";
     int choice=getChoice(1,2);
+    cout<<"\n\n";
     return choice == 1;
 }
 
@@ -101,6 +101,9 @@ int main() {
             }
             break;
             case 1: {
+                while (playAgain()) {
+                    cout << "Thank you for playing!\n";
+                }
                 cout << "This game is under construction!" << endl;
                 break;
             }
