@@ -1,14 +1,6 @@
-/**
- * @file XO_Classes.h
- * @brief Defines the X-O (Tic-Tac-Toe) specific classes that extend the generic board game framework.
- *
- * This file provides:
- * - `X_O_Board`: A specialized board class for the Tic-Tac-Toe game.
- * - `XO_UI`: A user interface class tailored to X-O game setup and player interaction.
- */
 
-#ifndef NUM_CLASSES_H
-#define NUM_CLASSES_H
+#ifndef NUM_H
+#define NUM_H
 
 #include "BoardGame_Classes.h"
 using namespace std;

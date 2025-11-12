@@ -4,7 +4,7 @@ project(oopcpp3)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(oopcpp3
-        XO_Classes.cpp
-        first.h
         MENU.cpp
+        NUM.cpp
+        NUM.h
 )
