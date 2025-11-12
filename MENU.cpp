@@ -6,7 +6,7 @@
 #include "NUM.h"
 using namespace std;
 
-
+srand(static_cast<unsighned int>(time(0)));
 int getChoice(int mn, int mx) {
     int choice;
     while (true) {
