@@ -3,9 +3,30 @@
 //
 #include<iostream>
 #include "XO_Classes.h"
+#include <limits>
 using namespace std;
 
+int getChoice(int mn, int mx) {
+    int choice;
+    while (true) {
+        cout << "enter choice between (" << mn << " & " << mx << " )" << endl;
+        if (cin >> choice) {
+            if (mn <= choice && choice <= mx) {
+                return choice;
+            }
+            cout << "invalid choice" << endl;
+            cout << "try again with number between (" << mn << " & " << mx << " )" << endl;
+
+        } else {
+            cout << "Invalid input! Please enter a number\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
+}
+
 int display_menu_and_get_choice() {
+    int choice;
     cout << "\n=========================================\n";
     cout << "          CS213 - Games Menu\n";
     cout << "=========================================\n";
@@ -15,7 +36,7 @@ int display_menu_and_get_choice() {
     cout << "2. Four-in-a-row\n";
     cout << "3. 5x5 TicTacToe\n";
     cout << "4. Word Tic-tac-toe\n";
-    cout << "5. Misère TicTacToe\n";
+    cout << "5. Misere TicTacToe\n";
     cout << "6. Diamond Tic-Tac-Toe\n";
     cout << "7. 4x4 Tic-Tac-Toe\n";
     cout << "8. Pyramid Tic-Tac-Toe\n";
@@ -28,10 +49,10 @@ int display_menu_and_get_choice() {
 
     cout << "Enter your choice: ";
 
-    int choice;
-    cin >> choice;
+    choice = getChoice(0, 12);
     return choice;
 }
+
 
 void xoRun() {
     srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
@@ -69,15 +90,10 @@ bool playAgain() {
     cout << "Do you want to play again?\n";
     cout << "1.Yes\n";
     cout << "2.No\n";
-    int choice;
-    cin >> choice;
-    while (choice != 1 && choice != 2) {
-        cout << "invalid choice\n";
-        cout << "please enter 1 or 2\n";
-        cin >> choice;
-    }
+    int choice=getChoice(1, 2);
     return choice == 1;
 }
+
 
 
 int main() {
@@ -90,6 +106,7 @@ int main() {
                 cout << "Exiting application. \n Goodbye!\n";
                 break;
             case 1:
+
                 cout << "This game is under construction!" << endl;
                 break;
             case 2:
