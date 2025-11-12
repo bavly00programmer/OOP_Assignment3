@@ -23,9 +23,10 @@ using namespace std;
  *
  * @see Board
  */
-class X_O_Board : public Board<char> {
+class X_O_Board : public Board<int> {
 private:
-    char blank_symbol = '.'; ///< Character used to represent an empty cell on the board.
+    int blank_symbol = 0;
+    ///< Character used to represent an empty cell on the board.
 
 public:
     /**
@@ -38,35 +39,35 @@ public:
      * @param move Pointer to a Move<char> object containing move coordinates and symbol.
      * @return true if the move is valid and successfully applied, false otherwise.
      */
-    bool update_board(Move<char>* move);
+    bool update_board(Move<int>* move);
 
     /**
      * @brief Checks if the given player has won the game.
      * @param player Pointer to the player being checked.
      * @return true if the player has a winning line, false otherwise.
      */
-    bool is_win(Player<char>* player);
+    bool is_win(Player<int>* player);
 
     /**
      * @brief Checks if the given player has lost the game.
      * @param player Pointer to the player being checked.
      * @return Always returns false (not used in X-O logic).
      */
-    bool is_lose(Player<char>*) { return false; };
+    bool is_lose(Player<int>*) { return false; };
 
     /**
      * @brief Checks if the game has ended in a draw.
      * @param player Pointer to the player being checked.
      * @return true if all cells are filled and no player has won, false otherwise.
      */
-    bool is_draw(Player<char>* player);
+    bool is_draw(Player<int>* player);
 
     /**
      * @brief Determines if the game is over (win or draw).
      * @param player Pointer to the player to evaluate.
      * @return true if the game has ended, false otherwise.
      */
-    bool game_is_over(Player<char>* player);
+    bool game_is_over(Player<int>* player);
 };
 
 
@@ -75,11 +76,11 @@ public:
  * @brief User Interface class for the X-O (Tic-Tac-Toe) game.
  *
  * Inherits from the generic `UI<char>` base class and provides
- * X-O–specific functionality for player setup and move input.
+ * X-Oï¿½specific functionality for player setup and move input.
  *
  * @see UI
  */
-class XO_UI : public UI<char> {
+class XO_UI : public UI<int> {
 public:
     /**
      * @brief Constructs an XO_UI object.
@@ -100,14 +101,14 @@ public:
      * @param type The type of the player (Human or Computer).
      * @return Pointer to the newly created Player<char> instance.
      */
-    Player<char>* create_player(string& name, char symbol, PlayerType type);
+    Player<int>* create_player(string& name, int symbol, PlayerType type);
 
     /**
      * @brief Retrieves the next move from a player.
      * @param player Pointer to the player whose move is being requested.
      * @return A pointer to a new `Move<char>` object representing the player's action.
      */
-    virtual Move<char>* get_move(Player<char>* player);
+    virtual Move<int>* get_move(Player<int>* player);
 };
 
 #endif // XO_CLASSES_H
