@@ -16,49 +16,60 @@ NUM_Board::NUM_Board() : Board(3, 3) {
         for (auto& cell : row)
             cell = blank_symbol;
 }
-
+bool Num_Board::if_valid_number_for_player(int num, Player<int>*player){
+if (player->get_symbol()==1){//odd
+    return(num==1||num==3||num==5||num==7||num==9);
+}else{
+    return(num==2||num==4||num==6||num==8);
+}
+}
 bool NUM_Board::update_board(Move<int>* move) {
     int x = move->get_x();
     int y = move->get_y();
     int num = move->get_symbol();
+    
+    //check if position is valid
+    if(x < 0||x >= rows|| y < 0 ||y >= columns)
+        return false;
 
-    if (num >= 1 && num <= 9 &&
-        find(used_numbers.begin(), used_numbers.end(), num) == used_numbers.end() &&
-        board[x][y] == 0) {
-        board[x][y] = num;
-        used_numbers.push_back(num);
-        n_moves++;
-        return true;
-        }
-    return false;
+    //check if cell empty
+    if(board[x][y] != blank_symbol)
+        return false;
+    
+    //check if number is in valid range and not used
+    if(num<1 ||num>9|| find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end())
+        return false;
+    board[x][y] = num;
+    used_numbers.push_back(num);
+    n_moves++;
+    return true;
 }
-
 
 bool NUM_Board::is_win(Player<int>* player) {
-    const char sym = player->get_symbol();
-
-    auto all_equal = [&](char a, char b, char c) {
-        return a == b && b == c && a != blank_symbol;
-        };
-
-    for (int i = 0; i < rows; i++)
-        if (board[i][0] + board[i][1] + board[i][2] == 15) return true;
-
-    for (int j = 0; j < columns; j++)
-        if (board[0][j] + board[1][j] + board[2][j] == 15) return true;
-
-    if (board[0][0] + board[1][1] + board[2][2] == 15) return true;
-    if (board[0][2] + board[1][1] + board[2][0] == 15) return true;
-
-
-    // Check diagonals
-    if ((all_equal(board[0][0], board[1][1], board[2][2]) && board[1][1] == sym) ||
-        (all_equal(board[0][2], board[1][1], board[2][0]) && board[1][1] == sym))
+    //check rows
+    for(int i =0;i<rows;i++){
+        if(board[i][0] != blank_symbol && board[i][1]!= blank_symbol && board[i][2] != blank_symbol && board[i][0]+board[i][1]+board[i][2]==15)
+            return true:
+                }
+    //check columns
+    for(int j=0; j< columns;j++){
+        if(board[0][j] != blank_symbol && board[1][j] != blank_symbol && board[2][j] != blank_symbol &&
+            board[0][j] + board[1][j] + board[2][j] == 15)
+            return true;
+    }
+    //check main diagonal
+    if(board[0][0] != blank_symbol && board[1][1] != blank_symbol && board[2][2] != blank_symbol &&
+        board[0][0] + board[1][1] + board[2][2] == 15) 
+        return true;
+}
+    //check anti-diagonal
+    if (board[0][2] != blank_symbol && board[1][1] != blank_symbol && board[2][0] != blank_symbol &&
+        board[0][2] + board[1][1] + board[2][0] == 15)
         return true;
 
-    return false;
+return false;
 }
-
+    
 bool NUM_Board::is_draw(Player<int>* player) {
     return (n_moves == 9 && !is_win(player));
 }
@@ -81,19 +92,32 @@ Player<int>* NUM_UI::create_player(string& name, int symbol, PlayerType type) {
 
 Move<int>* NUM_UI::get_move(Player<int>* player) {
     int x, y,num;
-    vector<int> used_numbers;
+    
     if (player->get_type() == PlayerType::HUMAN) {
-        cout << "Enter your move (number 1-9): ";
-        cin >>x>>y>> num;
-
+        cout<< player-> get_name()<<", enter your move:\n";
+        cout<<"Row (0-2);
+        cin>>x;
+        cout<<"Column (0-2): ";
+        cin>>y;
+        cout<<"Number: ";
+        cin>> num;
     } else {
-        do {
-            x = rand() % 3;
-            y = rand() % 3;
-            num = rand() % 9 + 1;
-        } while (find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end());
+       //computer move - simple random implementation
+       x= rand()%3;
+       y= rand()%3;
 
+       // generate valid number based on player
+        vector<int> valid_numbers;
+        if(player->get_symbol()==1){
+            valid_numbers = {1, 3, 5, 7, 9};
+        }else{
+            valid_numbers = {2, 4, 6, 8};
+        }
+        num = valid_numbers[rand() % valid_numbers.size()];
+        cout<<"comuter chooses: (" <<x<<", "<<y<< ") with number "<<num<<endl;
+    
     }
     return new Move<int>(x, y, num);
 }
+
 
