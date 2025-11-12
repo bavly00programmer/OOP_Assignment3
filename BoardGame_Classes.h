@@ -42,12 +42,16 @@ protected:
     int rows;        ///< Number of rows
     int columns;     ///< Number of columns
     vector<vector<T>> board; ///< 2D vector for the board
-    int n_moves = 0; ///< Number of moves made
+    int n_moves = 0;
+    vector<int> used_numbers;///< Number of moves made
+
 
 public:
     /**
      * @brief Construct a board with given dimensions.
      */
+
+
     Board(int rows, int columns)
         : rows(rows), columns(columns), board(rows, vector<T>(columns)) {}
 
@@ -126,7 +130,7 @@ class Player {
 protected:
     string name;         ///< Player name
     PlayerType type;     ///< Player type (e.g., HUMAN or COMPUTER)
-    T symbol;            ///< Player’s symbol on board
+    T symbol;            ///< Playerï¿½s symbol on board
     Board<T>* boardPtr;  ///< Pointer to the game board
 
 public:
