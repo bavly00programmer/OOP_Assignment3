@@ -66,7 +66,7 @@ void numericalTicTacToeRun() {
     srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
 
     // Create an instance of the specific UI for Numerical Tic-Tac-Toe
-    UI<int> *game_ui = new NUM_UI();
+    NUM_UI *game_ui = new NUM_UI();
 
     // Create the game board
     Board<int> *num_board = new NUM_Board();
@@ -82,6 +82,7 @@ void numericalTicTacToeRun() {
 
     // --- Cleanup ---
     delete num_board;
+    delete game_ui;
 
     for (int i = 0; i < 2; ++i)
         delete players[i];
