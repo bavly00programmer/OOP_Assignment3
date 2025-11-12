@@ -60,6 +60,8 @@ public:
      * @return true if the game has ended, false otherwise.
      */
     bool game_is_over(Player<int>* player);
+//to check if number is valid for player
+bool is_valid_number_for_player(int num, player<int>*player);
 };
 
 
@@ -72,6 +74,7 @@ public:
  *
  * @see UI
  */
+
 class NUM_UI : public UI<int> {
 public:
     /**
@@ -104,3 +107,4 @@ public:
 };
 
 #endif // NUM.H
+
