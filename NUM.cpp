@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 #include <cctype>  // for toupper()
 #include "NUM.h"
 
@@ -16,11 +18,11 @@ NUM_Board::NUM_Board() : Board(3, 3) {
         for (auto& cell : row)
             cell = blank_symbol;
 }
-bool Num_Board::if_valid_number_for_player(int num, Player<int>*player){
-if (player->get_symbol()==1){//odd
-    return(num==1||num==3||num==5||num==7||num==9);
-}else{
-    return(num==2||num==4||num==6||num==8);
+bool Num_Board::is_valid_number_for_player(int num, Player<int>* player){
+if (player->get_symbol() == 1){//odd
+    return(num == 1 ||num == 3 ||num == 5 ||num == 7 ||num == 9);
+}else{//even
+    return(num == 2|| num == 4 ||num == 6 ||num == 8);
 }
 }
 bool NUM_Board::update_board(Move<int>* move) {
@@ -29,16 +31,19 @@ bool NUM_Board::update_board(Move<int>* move) {
     int num = move->get_symbol();
     
     //check if position is valid
-    if(x < 0||x >= rows|| y < 0 ||y >= columns)
+    if(x < 0 ||x >= rows|| y < 0 ||y >= columns)
         return false;
 
     //check if cell empty
     if(board[x][y] != blank_symbol)
         return false;
     
-    //check if number is in valid range and not used
-    if(num<1 ||num>9|| find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end())
+    // Check if number is valid for player and not used
+    Player<int> temp_player("temp", num, PlayerType::HUMAN); // Temporary player for validation
+    if (!is_valid_number_for_player(num, &temp_player) || 
+        find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end())
         return false;
+    
     board[x][y] = num;
     used_numbers.push_back(num);
     n_moves++;
@@ -49,7 +54,7 @@ bool NUM_Board::is_win(Player<int>* player) {
     //check rows
     for(int i =0;i<rows;i++){
         if(board[i][0] != blank_symbol && board[i][1]!= blank_symbol && board[i][2] != blank_symbol && board[i][0]+board[i][1]+board[i][2]==15)
-            return true:
+            return true;
                 }
     //check columns
     for(int j=0; j< columns;j++){
@@ -58,9 +63,10 @@ bool NUM_Board::is_win(Player<int>* player) {
             return true;
     }
     //check main diagonal
-    if(board[0][0] != blank_symbol && board[1][1] != blank_symbol && board[2][2] != blank_symbol &&
-        board[0][0] + board[1][1] + board[2][2] == 15) 
-        return true;
+    if (board[0][0] != blank_symbol && board[1][1] != blank_symbol && board[2][2] != blank_symbol &&
+    board[0][0] + board[1][1] + board[2][2] == 15)
+    return true;
+    
 }
     //check anti-diagonal
     if (board[0][2] != blank_symbol && board[1][1] != blank_symbol && board[2][0] != blank_symbol &&
@@ -95,7 +101,7 @@ Move<int>* NUM_UI::get_move(Player<int>* player) {
     
     if (player->get_type() == PlayerType::HUMAN) {
         cout<< player-> get_name()<<", enter your move:\n";
-        cout<<"Row (0-2);
+        cout<<"Row (0-2): ";
         cin>>x;
         cout<<"Column (0-2): ";
         cin>>y;
@@ -124,7 +130,7 @@ Move<int>* NUM_UI::get_move(Player<int>* player) {
 
             //generate valid numbers based on player
             vector<int> valid_numbers;
-            if(player->get_sympol() ==1){
+            if(player->get_symbol() ==1){
               valid_numbers = {1, 3, 5, 7, 9};
              }else{
               valid_numbers = {2, 4, 6, 8};
@@ -137,7 +143,7 @@ Move<int>* NUM_UI::get_move(Player<int>* player) {
             attempts++;
             }
         }
- cout<<"Computer chooses: ("<<x<<", "<<y<<") with number "<<num<<endl;
+ cout << "Computer chooses: (" << x << ", " << y << ") with number " << num << endl;
     }
 return new Move<int>(x, y, num);
 }
@@ -147,6 +153,7 @@ return new Move<int>(x, y, num);
        
             
        
+
 
 
 
