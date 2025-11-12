@@ -69,7 +69,7 @@ bool NUM_Board::game_is_over(Player<int>* player) {
 
 //--------------------------------------- XO_UI Implementation
 
-NUM_UI::NUM_UI() : UI<int>("Weclome to FCAI Numerical Tic-Tac-Toe Game by Dr El-Ramly", 3) {}
+NUM_UI::NUM_UI() : UI<int>("Weclome to FCAI Numerical Tic-Tac-Toe Game", 3) {}
 
 Player<int>* NUM_UI::create_player(string& name, int symbol, PlayerType type) {
     // Create player based on type
@@ -96,3 +96,4 @@ Move<int>* NUM_UI::get_move(Player<int>* player) {
     }
     return new Move<int>(x, y, num);
 }
+
