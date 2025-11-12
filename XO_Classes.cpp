@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <iomanip>
-#include <algorithm>
 #include <cctype>  // for toupper()
 #include "XO_Classes.h"
 
@@ -17,39 +16,41 @@ X_O_Board::X_O_Board() : Board(3, 3) {
             cell = blank_symbol;
 }
 
-bool X_O_Board::update_board(Move<int>* move) {
+bool X_O_Board::update_board(Move<char>* move) {
     int x = move->get_x();
     int y = move->get_y();
-    int num = move->get_symbol();
+    char mark = move->get_symbol();
 
-    if (num >= 1 && num <= 9 &&
-        find(used_numbers.begin(), used_numbers.end(), num) == used_numbers.end() &&
-        board[x][y] == 0) {
-        board[x][y] = num;
-        used_numbers.push_back(num);
-        n_moves++;
-        return true;
+    // Validate move and apply if valid
+    if (!(x < 0 || x >= rows || y < 0 || y >= columns) &&
+        (board[x][y] == blank_symbol || mark == 0)) {
+
+        if (mark == 0) { // Undo move
+            n_moves--;
+            board[x][y] = blank_symbol;
         }
+        else {         // Apply move
+            n_moves++;
+            board[x][y] = toupper(mark);
+        }
+        return true;
+    }
     return false;
 }
 
-
-bool X_O_Board::is_win(Player<int>* player) {
+bool X_O_Board::is_win(Player<char>* player) {
     const char sym = player->get_symbol();
 
     auto all_equal = [&](char a, char b, char c) {
         return a == b && b == c && a != blank_symbol;
         };
 
-    for (int i = 0; i < rows; i++)
-        if (board[i][0] + board[i][1] + board[i][2] == 15) return true;
-
-    for (int j = 0; j < columns; j++)
-        if (board[0][j] + board[1][j] + board[2][j] == 15) return true;
-
-    if (board[0][0] + board[1][1] + board[2][2] == 15) return true;
-    if (board[0][2] + board[1][1] + board[2][0] == 15) return true;
-
+    // Check rows and columns
+    for (int i = 0; i < rows; ++i) {
+        if ((all_equal(board[i][0], board[i][1], board[i][2]) && board[i][0] == sym) ||
+            (all_equal(board[0][i], board[1][i], board[2][i]) && board[0][i] == sym))
+            return true;
+    }
 
     // Check diagonals
     if ((all_equal(board[0][0], board[1][1], board[2][2]) && board[1][1] == sym) ||
@@ -59,40 +60,36 @@ bool X_O_Board::is_win(Player<int>* player) {
     return false;
 }
 
-bool X_O_Board::is_draw(Player<int>* player) {
+bool X_O_Board::is_draw(Player<char>* player) {
     return (n_moves == 9 && !is_win(player));
 }
 
-bool X_O_Board::game_is_over(Player<int>* player) {
+bool X_O_Board::game_is_over(Player<char>* player) {
     return is_win(player) || is_draw(player);
 }
 
 //--------------------------------------- XO_UI Implementation
 
-XO_UI::XO_UI() : UI<int>("Weclome to FCAI X-O Game by Dr El-Ramly", 3) {}
+XO_UI::XO_UI() : UI<char>("Weclome to FCAI X-O Game by Dr El-Ramly", 3) {}
 
-Player<int>* XO_UI::create_player(string& name, int symbol, PlayerType type) {
+Player<char>* XO_UI::create_player(string& name, char symbol, PlayerType type) {
     // Create player based on type
     cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
         << " player: " << name << " (" << symbol << ")\n";
 
-    return new Player<int>(name, symbol, type);
+    return new Player<char>(name, symbol, type);
 }
 
-Move<int>* XO_UI::get_move(Player<int>* player) {
-    int x, y,num;
-    vector<int> used_numbers;
+Move<char>* XO_UI::get_move(Player<char>* player) {
+    int x, y;
+    
     if (player->get_type() == PlayerType::HUMAN) {
-        cout << "Enter your move (number 1-9): ";
-        cin >>x>>y>> num;
-
-    } else {
-        do {
-            x = rand() % 3;
-            y = rand() % 3;
-            num = rand() % 9 + 1;
-        } while (find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end());
-
+        cout << "\nPlease enter your move x and y (0 to 2): ";
+        cin >> x >> y;
     }
-    return new Move<int>(x, y, num);
+    else if (player->get_type() == PlayerType::COMPUTER) {
+        x = rand() % player->get_board_ptr()->get_rows();
+        y = rand() % player->get_board_ptr()->get_columns();
+    }
+    return new Move<char>(x, y, player->get_symbol());
 }
