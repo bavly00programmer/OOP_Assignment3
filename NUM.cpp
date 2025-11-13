@@ -27,6 +27,21 @@ int getChoice(int mn, int mx) {
         }
     }
 }
+int getNUmber () {
+    {
+        int choice;
+        while (true) {
+            cout << "Enter choice from Available numbers : ";
+            if (cin >> choice ) {
+                    return choice;
+            }
+                cout << "Invalid input! Please enter a number.\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        }
+    }
+}
 
 //--------------------------------------- NUM_Board Implementation
 
@@ -181,7 +196,7 @@ Move<int> *NUM_UI::get_move(Player<int> *player) {
 
         while (true) {
             cout << "Choose a number from available: ";
-            num = getChoice(1, 9);
+            num = getNUmber();
             if (find(valid.begin(), valid.end(), num) != valid.end()) break;
             cout << "Invalid number. Try again.\n";
         }
