@@ -6,22 +6,18 @@
 #include "NUM.h"
 using namespace std;
 
-
-int getChoice(int mn, int mx) {
+// NUM.cpp
+static int getChoice(int mn, int mx) {
     int choice;
     while (true) {
-        cout << "enter choice between [ " << mn << " , " << mx << " ] :" ;
-        if (cin >> choice) {
-            if (mn <= choice && choice <= mx) {
-                return choice;
-            }
-            cout << "invalid choice\n";
-            cout << "try again with number between [ " << mn << " , " << mx << " ]\n" ;
-
+        std::cout << "Enter choice between [" << mn << " , " << mx << "]: ";
+        if (std::cin >> choice) {
+            if (mn <= choice && choice <= mx) return choice;
+            std::cout << "Invalid choice. Try again.\n";
         } else {
-            cout << "Invalid input! Please enter a number\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            std::cout << "Invalid input! Please enter a number.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }
@@ -37,7 +33,7 @@ int display_menu_and_get_choice() {
     cout << "2. Four-in-a-row\n";
     cout << "3. 5x5 TicTacToe\n";
     cout << "4. Word Tic-tac-toe\n";
-    cout << "5. Misère TicTacToe\n";
+    cout << "5. Misere TicTacToe\n";
     cout << "6. Diamond Tic-Tac-Toe\n";
     cout << "7. 4x4 Tic-Tac-Toe\n";
     cout << "8. Pyramid Tic-Tac-Toe\n";

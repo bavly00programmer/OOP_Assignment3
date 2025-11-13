@@ -3,44 +3,58 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <limits>
 #include <cctype>  // for toupper()
 #include "NUM.h"
 
 using namespace std;
 
-//--------------------------------------- X_O_Board Implementation
+//--------------------------------------- Helper Function
 
-NUM_Board::NUM_Board() : Board(3, 3) {
-    // Initialize all cells with blank_symbol
-    for (auto& row : board)
-        for (auto& cell : row)
-            cell = blank_symbol;
-}
-
-// تم تصحيح اسم الدالة من if_valid_number_for_player
-bool NUM_Board::is_valid_number_for_player(int num, Player<int>*player){
-    if (player->get_symbol() == 1){ // odd
-        return(num == 1 || num == 3 || num == 5 || num == 7 || num == 9);
-    }else{
-        return(num == 2 || num == 4 || num == 6 || num == 8);
+int getChoice(int mn, int mx) {
+    int choice;
+    while (true) {
+        cout << "Enter choice between [" << mn << " , " << mx << "]: ";
+        if (cin >> choice) {
+            if (mn <= choice && choice <= mx) {
+                return choice;
+            }
+            cout << "Invalid choice. Try again.\n";
+        } else {
+            cout << "Invalid input! Please enter a number.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
     }
 }
 
-bool NUM_Board::update_board(Move<int>* move) {
+//--------------------------------------- NUM_Board Implementation
+
+NUM_Board::NUM_Board() : Board(3, 3) {
+    for (auto &row : board)
+        for (auto &cell : row)
+            cell = blank_symbol;
+}
+
+bool NUM_Board::is_valid_number_for_player(int num, Player<int> *player) {
+    if (player->get_symbol() == 1)
+        return (num == 1 || num == 3 || num == 5 || num == 7 || num == 9);
+    else
+        return (num == 2 || num == 4 || num == 6 || num == 8);
+}
+
+bool NUM_Board::update_board(Move<int> *move) {
     int x = move->get_x();
     int y = move->get_y();
     int num = move->get_symbol();
 
-    //check if position is valid
-    if(x < 0 || x >= rows || y < 0 || y >= columns)
+    if (x < 0 || x >= rows || y < 0 || y >= columns)
         return false;
 
-    //check if cell empty
-    if(board[x][y] != blank_symbol)
+    if (board[x][y] != blank_symbol)
         return false;
 
-    //check if number is in valid range and not used
-    if(num < 1 || num > 9 || find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end())
+    if (num < 1 || num > 9 || find(used_numbers.begin(), used_numbers.end(), num) != used_numbers.end())
         return false;
 
     board[x][y] = num;
@@ -49,112 +63,140 @@ bool NUM_Board::update_board(Move<int>* move) {
     return true;
 }
 
-bool NUM_Board::is_win(Player<int>* player) {
-    //check rows
-    for(int i = 0; i < rows; i++){
-        // تصحيح الخطأ النحوي هنا (استبدال : بـ ;)
-        if(board[i][0] != blank_symbol && board[i][1] != blank_symbol && board[i][2] != blank_symbol && board[i][0] + board[i][1] + board[i][2] == 15)
+bool NUM_Board::is_win(Player<int> *player) {
+    // Check rows
+    for (int i = 0; i < rows; i++)
+        if (board[i][0] != blank_symbol && board[i][1] != blank_symbol && board[i][2] != blank_symbol &&
+            board[i][0] + board[i][1] + board[i][2] == 15)
             return true;
-    }
-    //check columns
-    for(int j = 0; j < columns; j++){
-        if(board[0][j] != blank_symbol && board[1][j] != blank_symbol && board[2][j] != blank_symbol &&
+
+    // Check columns
+    for (int j = 0; j < columns; j++)
+        if (board[0][j] != blank_symbol && board[1][j] != blank_symbol && board[2][j] != blank_symbol &&
             board[0][j] + board[1][j] + board[2][j] == 15)
             return true;
-    }
-    //check main diagonal
-    if(board[0][0] != blank_symbol && board[1][1] != blank_symbol && board[2][2] != blank_symbol &&
+
+    // Check diagonals
+    if (board[0][0] != blank_symbol && board[1][1] != blank_symbol && board[2][2] != blank_symbol &&
         board[0][0] + board[1][1] + board[2][2] == 15)
         return true;
 
-    //check anti-diagonal
     if (board[0][2] != blank_symbol && board[1][1] != blank_symbol && board[2][0] != blank_symbol &&
         board[0][2] + board[1][1] + board[2][0] == 15)
         return true;
 
     return false;
-} // تم وضع قوس إغلاق الدالة هنا بشكل صحيح
+}
 
-bool NUM_Board::is_draw(Player<int>* player) {
-    // هذه الدالة تعتمد على منطق اللوحة الممتلئة (9 حركات)
+bool NUM_Board::is_draw(Player<int> *player) {
     return (n_moves == 9 && !is_win(player));
 }
 
-bool NUM_Board::game_is_over(Player<int>* player) {
+bool NUM_Board::game_is_over(Player<int> *player) {
     return is_win(player) || is_draw(player);
 }
 
-//--------------------------------------- XO_UI Implementation
-
-NUM_UI::NUM_UI() : UI<int>("Weclome to FCAI Numerical Tic-Tac-Toe Game", 3) {}
-
-Player<int>* NUM_UI::create_player(string& name, int symbol, PlayerType type) {
-    // Create player based on type
-    cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
-        << " player: " << name <<  "\n";
-
-    return new Player<int>(name, symbol, type);
+vector<int> NUM_Board::get_used_numbers() const {
+    return used_numbers;
 }
 
-Move<int>* NUM_UI::get_move(Player<int>* player) {
-    int x = -1, y = -1, num = -1; // تهيئة المتغيرات لتجنب التحذيرات
+int NUM_Board::get_cell(int x, int y) const {
+    return board[x][y];
+}
 
-    if (player->get_type() == PlayerType::HUMAN) {
-        cout<< player->get_name()<<", enter your move:\n";
+int NUM_Board::get_blank_symbol() const {
+    return blank_symbol;
+}
 
-        // تصحيح الخطأ النحوي (إضافة ;)
-        cout<<"Row (0-2): ";
-        cin>>x;
-        cout<<"Column (0-2): ";
-        cin>>y;
-        cout<<"Number: ";
-        cin>> num;
-    } else {
-       //computer move - get the board pointer to access used numbers
-        Board<int>* boardPtr = player->get_board_ptr();
-        if(!boardPtr){
-            //fallback if no board pointer
+//--------------------------------------- NUM_Player Implementation
+
+NUM_Player::NUM_Player(const std::string &n, const std::string &id_, PlayerType t)
+    : Player<int>(n, (id_ == "odd" ? 1 : 2), t), id(id_) {
+    if (id == "odd")
+        ValidNum = {1, 3, 5, 7, 9};
+    else
+        ValidNum = {2, 4, 6, 8};
+}
+
+vector<int> NUM_Player::getValidNumbers(const vector<int> &used) {
+    vector<int> available;
+    for (int n : ValidNum)
+        if (find(used.begin(), used.end(), n) == used.end())
+            available.push_back(n);
+    return available;
+}
+
+string NUM_Player::get_id() const {
+    return id;
+}
+
+//--------------------------------------- NUM_UI Implementation
+
+NUM_UI::NUM_UI() : UI<int>("Welcome to FCAI Numerical Tic-Tac-Toe Game", 3) {}
+
+// Override create_player
+Player<int> *NUM_UI::create_player(string &name, int symbol, PlayerType type) {
+    string id = (symbol == 1) ? "odd" : "even";
+    cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
+         << " player (" << id << "): " << name << "\n";
+    return new NUM_Player(name, id, type);
+}
+
+// Override setup_players to replace X/O with ODD/EVEN
+Player<int> **NUM_UI::setup_players() {
+    Player<int> **players = new Player<int> *[2];
+    vector<string> type_options = {"Human", "Computer"};
+
+    string nameOdd = get_player_name("Player ODD");
+    PlayerType typeOdd = get_player_type_choice("Player ODD", type_options);
+    players[0] = create_player(nameOdd, 1, typeOdd);  // 1 = odd
+
+    string nameEven = get_player_name("Player EVEN");
+    PlayerType typeEven = get_player_type_choice("Player EVEN", type_options);
+    players[1] = create_player(nameEven, 2, typeEven); // 2 = even
+
+    return players;
+}
+
+Move<int> *NUM_UI::get_move(Player<int> *player) {
+    int x = -1, y = -1, num = -1;
+
+    NUM_Board *numBoard = dynamic_cast<NUM_Board *>(player->get_board_ptr());
+    NUM_Player *numPlayer = dynamic_cast<NUM_Player *>(player);
+
+    vector<int> used_numbers = numBoard ? numBoard->get_used_numbers() : vector<int>{};
+
+    if (player->get_type() == PlayerType::HUMAN && numPlayer) {
+        cout << "\n" << player->get_name() << " (" << numPlayer->get_id() << ") it's your turn.\n";
+        cout << "Available numbers: ";
+        vector<int> valid = numPlayer->getValidNumbers(used_numbers);
+        for (int v : valid)
+            cout << v << " ";
+        cout << "\n";
+
+        cout << "Row (0-2): ";
+        x = getChoice(0, 2);
+        cout << "Column (0-2): ";
+        y = getChoice(0, 2);
+
+        while (true) {
+            cout << "Choose a number from available: ";
+            num = getChoice(1, 9);
+            if (find(valid.begin(), valid.end(), num) != valid.end()) break;
+            cout << "Invalid number. Try again.\n";
+        }
+
+    } else if (numPlayer) {
+        vector<int> valid = numPlayer->getValidNumbers(used_numbers);
+
+        do {
             x = rand() % 3;
             y = rand() % 3;
+        } while (numBoard && numBoard->get_cell(x, y) != numBoard->get_blank_symbol());
 
-            // generate valid number based on player
-             vector<int> valid_numbers = (player->get_symbol() == 1) ? vector<int>{1, 3, 5, 7, 9} : vector<int>{2, 4, 6, 8};
-            num = valid_numbers[rand() % valid_numbers.size()];
-        }else{
-            //try random valid moves until we find one that works
-            bool valid_move = false;
-            int attempts = 0;
-            // لا يمكن استدعاء get_used_numbers إلا إذا كانت دالة عامة ومعرفة في Board
-            // vector<int> used_nums = boardPtr->get_used_numbers();
-
-            while(!valid_move && attempts < 50){
-                x = rand() % 3;
-                y = rand() % 3;
-
-                //generate valid numbers based on player
-                vector<int> valid_numbers;
-                // تصحيح الخطأ الإملائي: get_sympol إلى get_symbol
-                if(player->get_symbol() == 1){
-                  valid_numbers = {1, 3, 5, 7, 9};
-                 }else{
-                  valid_numbers = {2, 4, 6, 8};
-                 }
-                num = valid_numbers[rand() % valid_numbers.size()];
-
-                // يتم هنا تجاهل منطق التحقق من أن الرقم غير مستخدم أو أن الخلية فارغة
-                // يجب استخدام دالة update_board للتحقق أو تنفيذ منطق التحقق هنا
-                valid_move = true; // تم تبسيط هذه النقطة، لكنها قد تكون مصدرًا للأخطاء المنطقية
-                attempts++;
-            }
-        }
- cout<<"Computer chooses: ("<<x<<", "<<y<<") with number "<<num<<endl;
+        num = valid[rand() % valid.size()];
+        cout << "Computer chooses: (" << x << ", " << y << ") with number " << num << endl;
     }
-return new Move<int>(x, y, num);
+
+    return new Move<int>(x, y, num);
 }
-                 
-       
-            
-       
-
-
-
