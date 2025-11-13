@@ -90,8 +90,10 @@ NUM_UI::NUM_UI() : UI<int>("Weclome to FCAI Numerical Tic-Tac-Toe Game", 3) {}
 
 Player<int>* NUM_UI::create_player(string& name, int symbol, PlayerType type) {
     // Create player based on type
+    char display_symbol = (symbol == 1)? 'X' : 'O';
+    
     cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
-        << " player: " << name << " (" << symbol << ")\n";
+        << " player: " << name << " (" << display_symbol << ")\n";
 
     return new Player<int>(name, symbol, type);
 }
@@ -155,6 +157,7 @@ return new Move<int>(x, y, num);
        
             
        
+
 
 
 
