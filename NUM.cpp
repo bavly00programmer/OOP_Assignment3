@@ -17,22 +17,6 @@ NUM_Board::NUM_Board() : Board(3, 3) {
             cell = blank_symbol;
 }
 
-void NUM_BOARD::display_board() {
-cout << "\n--------------\n";
-for int(i=0; i<rows;i++){
-   cout<"| ";
-    for(int j=0;j<columns; j++){
-       if(board[i][j] == blank_symbol){
-           cout<<"  | "; //Empty cell
-       }else{
-           cout<<board[i][j] << " | ";//show the number
-       }
-    }
-cout<< "\n----------------\n";
-}
-cout<< endl; 
-}
-
 // تم تصحيح اسم الدالة من if_valid_number_for_player
 bool NUM_Board::is_valid_number_for_player(int num, Player<int>*player){
     if (player->get_symbol() == 1){ // odd
@@ -106,10 +90,8 @@ NUM_UI::NUM_UI() : UI<int>("Weclome to FCAI Numerical Tic-Tac-Toe Game", 3) {}
 
 Player<int>* NUM_UI::create_player(string& name, int symbol, PlayerType type) {
     // Create player based on type
-    char display_symbol = (symbol == 1)? 'X' : 'O';
-    
     cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
-        << " player: " << name << " (" << display_symbol << ")\n";
+        << " player: " << name <<  "\n";
 
     return new Player<int>(name, symbol, type);
 }
@@ -173,8 +155,6 @@ return new Move<int>(x, y, num);
        
             
        
-
-
 
 
 
