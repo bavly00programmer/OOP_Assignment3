@@ -15,7 +15,7 @@ private:
     ///< Character used to represent an empty cell on the board.
 
     // يفضل إضافة قائمة بالأرقام المستخدمة هنا إذا لم تكن موجودة في Board الأساسية
-    // vector<int> used_numbers;
+     vector<int> used_numbers;
 
 public:
     /**
@@ -85,4 +85,5 @@ public:
 };
 
 #endif // NUM.H
+
 
