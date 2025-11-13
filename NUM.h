@@ -50,6 +50,8 @@ public:
 
     // تصحيح الخطأ هنا P كبير
     bool is_valid_number_for_player(int num, Player<int>* player);
+    //override to display numbers properly
+    void display_board();
 };
 
 
@@ -83,3 +85,4 @@ public:
 };
 
 #endif // NUM.H
+
