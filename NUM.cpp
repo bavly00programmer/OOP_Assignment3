@@ -17,6 +17,22 @@ NUM_Board::NUM_Board() : Board(3, 3) {
             cell = blank_symbol;
 }
 
+void NUM_BOARD::display_board() {
+cout << "\n--------------\n";
+for int(i=0; i<rows;i++){
+   cout<"| ";
+    for(int j=0;j<columns; j++){
+       if(board[i][j] == blank_symbol){
+           cout<<"  | "; //Empty cell
+       }else{
+           cout<<board[i][j] << " | ";//show the number
+       }
+    }
+cout<< "\n----------------\n";
+}
+cout<< endl; 
+}
+
 // تم تصحيح اسم الدالة من if_valid_number_for_player
 bool NUM_Board::is_valid_number_for_player(int num, Player<int>*player){
     if (player->get_symbol() == 1){ // odd
@@ -157,6 +173,7 @@ return new Move<int>(x, y, num);
        
             
        
+
 
 
 
