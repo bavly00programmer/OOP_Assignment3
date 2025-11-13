@@ -15,7 +15,7 @@ private:
     ///< Character used to represent an empty cell on the board.
 
     // يفضل إضافة قائمة بالأرقام المستخدمة هنا إذا لم تكن موجودة في Board الأساسية
-     vector<int> used_numbers;
+    // vector<int> used_numbers;
 
 public:
     /**
@@ -50,8 +50,6 @@ public:
 
     // تصحيح الخطأ هنا P كبير
     bool is_valid_number_for_player(int num, Player<int>* player);
-    //override to display numbers properly
-    void display_board();
 };
 
 
@@ -85,5 +83,3 @@ public:
 };
 
 #endif // NUM.H
-
-
