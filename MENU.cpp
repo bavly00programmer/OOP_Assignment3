@@ -5,6 +5,7 @@
 #include "NUM.h"
 #include"SUS.h"
 #include "Help_Function.h"
+#include "InfinityTic-Tac-Toe.h"
 using namespace std;
 
 // NUM.cpp
@@ -100,6 +101,33 @@ void SUSRun() {
     delete[] players;
 }
 
+void infinityRun() {
+    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+
+    // Create an instance of the specific UI for SUS
+    infinity_UI *game_ui = new infinity_UI();
+
+    // Create the game board
+    Board<char> *infinity_board = new infinity_Board();
+
+    // Set up players (returns dynamically allocated array of Player pointers)
+    Player<char> **players = game_ui->setup_players();
+
+    // Create the game manager
+    GameManager<char> infinity_game(infinity_board, players, game_ui);
+
+    // Run the game loop
+    infinity_game.run();
+
+    // --- Cleanup ---
+    delete infinity_board;
+    delete game_ui;
+
+    for (int i = 0; i < 2; ++i)
+        delete players[i];
+
+    delete[] players;
+}
 int main() {
     int choice;
     do {
@@ -148,6 +176,7 @@ int main() {
             case 9: {
                 do {
                     numericalTicTacToeRun();
+                    cout << "Thank you for playing!\n";
                 } while (playAgain());
                 break;
             }
@@ -156,7 +185,10 @@ int main() {
                 break;
             }
             case 11: {
-                cout << "This game is under construction!" << endl;
+                do {
+                   infinityRun();
+                    cout << "Thank you for playing!\n";
+                } while (playAgain());
                 break;
             }
             default: {

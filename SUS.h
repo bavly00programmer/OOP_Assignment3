@@ -35,8 +35,6 @@ public:
 
 
 class  SUS_UI: public UI<char> {
-protected:PlayerType GetPlayerTypeChoice
-    (string player_label, const vector<string> &options);
 
 public:
 

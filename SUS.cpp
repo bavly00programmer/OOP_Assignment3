@@ -112,14 +112,7 @@ bool SUS_Board::game_is_over(Player<char> *player) {
 SUS_UI::SUS_UI() : UI("Welcome to FCAI SUS Game", 3) {
 }
 
-PlayerType SUS_UI::GetPlayerTypeChoice(string player_label, const vector<string> &options) {
-    cout << "Choose " << player_label << " type:\n";
-    for (size_t i = 0; i < options.size(); ++i)
-        cout << i + 1 << ". " << options[i] << "\n";
-    int choice;
-    choice = getChoice(1, 2);
-    return (choice == 2) ? PlayerType::COMPUTER : PlayerType::HUMAN;
-}
+
 
 Player<char> *SUS_UI::create_player(string &name, char symbol, PlayerType type) {
     cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")

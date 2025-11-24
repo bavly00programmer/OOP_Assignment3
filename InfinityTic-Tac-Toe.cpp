@@ -1,0 +1,112 @@
+//
+// Created by Bavly on 11/25/2025.
+//
+
+#include "InfinityTic-Tac-Toe.h"
+//--------------------------------------- IMPLEMENTATION
+
+#include <iostream>
+#include <iomanip>
+#include <cctype>  // for toupper()
+#include "Help_Function.h"
+
+using namespace std;
+
+//--------------------------------------- infinity_Board Implementation
+
+infinity_Board::infinity_Board() : Board(3, 3) {
+    // Initialize all cells with blank_symbol
+    for (auto &row: board)
+        for (auto &cell: row)
+            cell = blank_symbol;
+}
+
+bool infinity_Board::update_board(Move<char> *move) {
+    int x = move->get_x();
+    int y = move->get_y();
+    char mark = move->get_symbol();
+
+    if (!(x < 0 || x >= rows || y < 0 || y >= columns) &&
+        (board[x][y] == blank_symbol || mark == 0)) {
+        if (mark == 0) {
+            // Undo move
+            n_moves--;
+            board[x][y] = blank_symbol;
+        } else {
+            // Apply move
+            n_moves++;
+            count++;
+            board[x][y] = toupper(mark);
+            MOVES.push_back(make_pair(x, y));
+
+            if (count==4) {
+                int x = MOVES.front().first;
+                int y = MOVES.front().second;
+                MOVES.pop_front();
+                board[x][y] = blank_symbol;
+                count=0;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool infinity_Board::is_win(Player<char> *player) {
+    const char sym = player->get_symbol();
+
+    auto all_equal = [&](char a, char b, char c) {
+        return a == b && b == c && a != blank_symbol;
+    };
+
+    // Check rows and columns
+    for (int i = 0; i < rows; ++i) {
+        if ((all_equal(board[i][0], board[i][1], board[i][2]) && board[i][0] == sym) ||
+            (all_equal(board[0][i], board[1][i], board[2][i]) && board[0][i] == sym))
+            return true;
+    }
+
+    // Check diagonals
+    if ((all_equal(board[0][0], board[1][1], board[2][2]) && board[1][1] == sym) ||
+        (all_equal(board[0][2], board[1][1], board[2][0]) && board[1][1] == sym))
+        return true;
+
+    return false;
+}
+
+bool infinity_Board::is_draw(Player<char> *player) {
+    return (n_moves == 50 && !is_win(player));
+}
+
+bool infinity_Board::game_is_over(Player<char> *player) {
+    return is_win(player) || is_draw(player);
+}
+
+//--------------------------------------- infinity_UI Implementation
+
+infinity_UI::infinity_UI() : UI<char>("Weclome to 11.infinity Tic-Tac-Toe", 3) {
+}
+
+Player<char> *infinity_UI::create_player(string &name, char symbol, PlayerType type) {
+    // Create player based on type
+    cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
+            << " player: " << name << " (" << symbol << ")\n";
+
+    return new Player<char>(name, symbol, type);
+}
+
+Move<char> *infinity_UI::get_move(Player<char> *player) {
+    int x, y;
+    if (player->get_type() == PlayerType::HUMAN) {
+        cout << player->get_name() << " it's your turn! \n";
+        cout << "enter your move:\n";
+        cout << "Row (0-2): ";
+        x = getChoice(0, 2); //help function
+        cout << "Column (0-2): ";
+        y = getChoice(0, 2); //help function
+    } else if (player->get_type() == PlayerType::COMPUTER) {
+        x = rand() % player->get_board_ptr()->get_rows();
+        y = rand() % player->get_board_ptr()->get_columns();
+    }
+    return new Move<char>(x, y, player->get_symbol());
+}

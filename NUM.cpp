@@ -119,6 +119,7 @@ string NUM_Player::get_id() const {
 NUM_UI::NUM_UI() : UI<int>("Welcome to FCAI Numerical Tic-Tac-Toe Game", 3) {
 }
 
+
 // Override create_player
 Player<int> *NUM_UI::create_player(string &name, int symbol, PlayerType type) {
     string id = (symbol == 1) ? "odd" : "even";
