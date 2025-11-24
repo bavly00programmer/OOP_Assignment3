@@ -3,51 +3,20 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include <limits>
+#include"Help_Function.h"
 #include <cctype>  // for toupper()
 #include "NUM.h"
-
+#include"Help_Function.h"
 using namespace std;
 
 //--------------------------------------- Helper Function
 
-int getChoice(int mn, int mx) {
-    int choice;
-    while (true) {
-        cout << "Enter choice between [" << mn << " , " << mx << "]: ";
-        if (cin >> choice) {
-            if (mn <= choice && choice <= mx) {
-                return choice;
-            }
-            cout << "Invalid choice. Try again.\n";
-        } else {
-            cout << "Invalid input! Please enter a number.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-    }
-}
-int getNUmber () {
-    {
-        int choice;
-        while (true) {
-            cout << "Enter choice from Available numbers : ";
-            if (cin >> choice ) {
-                    return choice;
-            }
-                cout << "Invalid input! Please enter a number.\n";
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        }
-    }
-}
 
 //--------------------------------------- NUM_Board Implementation
 
 NUM_Board::NUM_Board() : Board(3, 3) {
-    for (auto &row : board)
-        for (auto &cell : row)
+    for (auto &row: board)
+        for (auto &cell: row)
             cell = blank_symbol;
 }
 
@@ -135,7 +104,7 @@ NUM_Player::NUM_Player(const std::string &n, const std::string &id_, PlayerType 
 
 vector<int> NUM_Player::getValidNumbers(const vector<int> &used) {
     vector<int> available;
-    for (int n : ValidNum)
+    for (int n: ValidNum)
         if (find(used.begin(), used.end(), n) == used.end())
             available.push_back(n);
     return available;
@@ -147,13 +116,14 @@ string NUM_Player::get_id() const {
 
 //--------------------------------------- NUM_UI Implementation
 
-NUM_UI::NUM_UI() : UI<int>("Welcome to FCAI Numerical Tic-Tac-Toe Game", 3) {}
+NUM_UI::NUM_UI() : UI<int>("Welcome to FCAI Numerical Tic-Tac-Toe Game", 3) {
+}
 
 // Override create_player
 Player<int> *NUM_UI::create_player(string &name, int symbol, PlayerType type) {
     string id = (symbol == 1) ? "odd" : "even";
     cout << "Creating " << (type == PlayerType::HUMAN ? "human" : "computer")
-         << " player (" << id << "): " << name << "\n";
+            << " player (" << id << "): " << name << "\n";
     return new NUM_Player(name, id, type);
 }
 
@@ -164,7 +134,7 @@ Player<int> **NUM_UI::setup_players() {
 
     string nameOdd = get_player_name("Player ODD");
     PlayerType typeOdd = get_player_type_choice("Player ODD", type_options);
-    players[0] = create_player(nameOdd, 1, typeOdd);  // 1 = odd
+    players[0] = create_player(nameOdd, 1, typeOdd); // 1 = odd
 
     string nameEven = get_player_name("Player EVEN");
     PlayerType typeEven = get_player_type_choice("Player EVEN", type_options);
@@ -185,22 +155,21 @@ Move<int> *NUM_UI::get_move(Player<int> *player) {
         cout << "\n" << player->get_name() << " (" << numPlayer->get_id() << ") it's your turn.\n";
         cout << "Available numbers: ";
         vector<int> valid = numPlayer->getValidNumbers(used_numbers);
-        for (int v : valid)
+        for (int v: valid)
             cout << v << " ";
         cout << "\n";
 
         cout << "Row (0-2): ";
-        x = getChoice(0, 2);
+        x = getChoice(0, 2); //help function
         cout << "Column (0-2): ";
-        y = getChoice(0, 2);
+        y = getChoice(0, 2); //help function
 
         while (true) {
             cout << "Choose a number from available: ";
-            num = getNUmber();
+            num = getNUmber(); //help function
             if (find(valid.begin(), valid.end(), num) != valid.end()) break;
             cout << "Invalid number. Try again.\n";
         }
-
     } else if (numPlayer) {
         vector<int> valid = numPlayer->getValidNumbers(used_numbers);
 

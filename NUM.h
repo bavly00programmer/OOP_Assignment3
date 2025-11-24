@@ -43,8 +43,8 @@ public:
     NUM_UI();
     ~NUM_UI() {}
 
-    Player<int> *create_player(string &name, int symbol, PlayerType type);
-    Move<int> *get_move(Player<int> *player);
+    Player<int> *create_player(string &name, int symbol, PlayerType type) override;
+    Move<int> *get_move(Player<int> *player)override;
 
     Player<int>** setup_players() override;
 };

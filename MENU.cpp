@@ -2,26 +2,12 @@
 // Created by HP on 11/11/2025.
 //
 #include<iostream>
-#include<limits>
 #include "NUM.h"
+#include"SUS.h"
+#include "Help_Function.h"
 using namespace std;
 
 // NUM.cpp
-static int getChoice(int mn, int mx) {
-    int choice;
-    while (true) {
-        std::cout << "Enter choice between [" << mn << " , " << mx << "]: ";
-        if (std::cin >> choice) {
-            if (mn <= choice && choice <= mx) return choice;
-            std::cout << "Invalid choice. Try again.\n";
-        } else {
-            std::cout << "Invalid input! Please enter a number.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-    }
-}
-
 
 int display_menu_and_get_choice() {
     cout << "\n=========================================\n";
@@ -42,8 +28,8 @@ int display_menu_and_get_choice() {
     cout << "11. Infinity Tic-Tac-Toe\n";
     cout << "0 - Exit Application\n\n";
 
-    int choice =getChoice(0,11);
-    cout<<"\n\n";
+    int choice = getChoice(0, 11);
+    cout << "\n\n";
     return choice;
 }
 
@@ -52,8 +38,8 @@ bool playAgain() {
     cout << "Do you want to play again?\n";
     cout << "1.Yes\n";
     cout << "2.No\n";
-    int choice=getChoice(1,2);
-    cout<<"\n\n";
+    int choice = getChoice(1, 2);
+    cout << "\n\n";
     return choice == 1;
 }
 
@@ -86,6 +72,33 @@ void numericalTicTacToeRun() {
     delete[] players;
 }
 
+void SUSRun() {
+    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+
+    // Create an instance of the specific UI for SUS
+    SUS_UI *game_ui = new SUS_UI();
+
+    // Create the game board
+    Board<char> *SUS_board = new SUS_Board();
+
+    // Set up players (returns dynamically allocated array of Player pointers)
+    Player<char> **players = game_ui->setup_players();
+
+    // Create the game manager
+    GameManager<char> SUS_game(SUS_board, players, game_ui);
+
+    // Run the game loop
+    SUS_game.run();
+
+    // --- Cleanup ---
+    delete SUS_board;
+    delete game_ui;
+
+    for (int i = 0; i < 2; ++i)
+        delete players[i];
+
+    delete[] players;
+}
 
 int main() {
     int choice;
@@ -98,10 +111,10 @@ int main() {
             }
             break;
             case 1: {
-                while (playAgain()) {
+                do {
+                    SUSRun();
                     cout << "Thank you for playing!\n";
-                }
-                cout << "This game is under construction!" << endl;
+                } while (playAgain());
                 break;
             }
             case 2: {
