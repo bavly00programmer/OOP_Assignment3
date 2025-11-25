@@ -186,7 +186,9 @@ int main() {
                 break;
             }
             case 5: {
-                cout << "This game is under construction!" << endl;
+                do{
+                   misereTicTacToeRun();
+                  }while(playAgain());
                 break;
             }
             case 6: {
