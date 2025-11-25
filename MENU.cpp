@@ -6,6 +6,7 @@
 #include"SUS.h"
 #include "Help_Function.h"
 #include "InfinityTic-Tac-Toe.h"
+#include "MISERE.h'
 using namespace std;
 
 // NUM.cpp
