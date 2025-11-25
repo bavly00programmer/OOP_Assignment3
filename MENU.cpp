@@ -128,6 +128,34 @@ void infinityRun() {
 
     delete[] players;
 }
+void misereTicTacToeRun(){
+srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+
+    // Create an instance of the specific UI for Misère Tic-Tac-Toe
+    MISERE_UI *game_ui = new MISERE_UI();
+
+    // Create the game board
+    Board<char> *misere_board = new MISERE_Board();
+
+    // Set up players (returns dynamically allocated array of Player pointers)
+    Player<char> **players = game_ui->setup_players();
+
+    // Create the game manager
+    GameManager<char> misere_game(misere_board, players, game_ui);
+
+    // Run the game loop
+    misere_game.run();
+
+    // --- Cleanup ---
+    delete misere_board;
+    delete game_ui;
+
+    for (int i = 0; i < 2; ++i)
+        delete players[i];
+
+    delete[] players;
+}
+
 int main() {
     int choice;
     do {
