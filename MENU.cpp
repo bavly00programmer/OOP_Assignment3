@@ -6,7 +6,7 @@
 #include"SUS.h"
 #include "Help_Function.h"
 #include "InfinityTic-Tac-Toe.h"
-#include "MISERE.h'
+#include "MISERE.h"
 using namespace std;
 
 // NUM.cpp
@@ -101,7 +101,6 @@ void SUSRun() {
 
     delete[] players;
 }
-
 void infinityRun() {
     srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
 

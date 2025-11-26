@@ -7,6 +7,7 @@
 #include<cctype>
 #include<iomanip>
 #include<iostream>
+#include "Help_Function.h"
 
 using namespace std;
 //-----------------------------------------------------------MISERE_Board implementation
@@ -17,6 +18,12 @@ MISERE_Board::MISERE_Board() : Board(3,3){
         for (auto& cell:row)
             cell = blank_symbol;
 }
+
+MISERE_Board::~MISERE_Board() {
+
+}
+
+
 bool MISERE_Board::update_board(Move<char>* move) {
     int x=move->get_x();
     int y=move->get_y();
@@ -89,37 +96,29 @@ bool MISERE_Board::is_draw(Player<char>* player) {
     return (n_moves == 9 && !is_win(player) && !is_lose(player));
 }
 
-bool MISERE_Board::game_over(Player<char>* player) {
+bool MISERE_Board::game_is_over(Player<char>* player) {
     return is_win(player) || is_lose(player) || is_draw(player);
 }
 
-void MISERE_Board::display_board() {
-    cout << "\n-------------\n";
-    for (int i = 0; i < rows; i++) {
-        cout << "| ";
-        for (int j = 0; j < columns; j++) {
-            cout << board[i][j] << " | ";
-        }
-        cout << "\n-------------\n";
-    }
-    cout << endl;
-}
  //-------------------------------------MISERE_UI Implementation
 
-MISERE_UI::MISERE_UI() :UI<char>("Welcome to FCAI misere tic-tac-toe game",1){}
+MISERE_UI::MISERE_UI() :UI<char>("Welcome to FCAI misere tic-tac-toe game",1){
+
+}
 Player<char> *MISERE_UI::create_player(string &name, char symbol, PlayerType type) {
-    cout << "Creating " << (type == PlayerType::HUMAN ? "human":"computer") << "player: " << name << " (" << symbol << ")" << endl;
+    cout << "Creating " << (type == PlayerType::HUMAN ? "human":"computer") << " player: " << name << " (" << symbol << ")" << endl;
     return new Player<char>(name,symbol,type);
 }
+
 Move<char>* MISERE_UI::get_move(Player<char>* player) {
     int x = -1, y = -1;
 
     if (player->get_type() == PlayerType::HUMAN) {
         cout << player->get_name() << ", enter your move:\n";
         cout << "Row (0-2): ";
-        cin >> x;
+x=getChoice(0 ,2);
         cout << "Column (0-2): ";
-        cin >> y;
+       y=getChoice(0 ,2);
     } else {
         // Computer move - simple random strategy
         // In Misère Tic-Tac-Toe, computer should try to avoid making three in a row
