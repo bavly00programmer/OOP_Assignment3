@@ -13,19 +13,19 @@ private:
 public:
     NUM_Board();
 
-    bool update_board(Move<int> *move);
+    bool update_board(Move<int> *move)override;
 
-    bool is_win(Player<int> *player);
+    bool is_win(Player<int> *player)override;
 
-    bool is_lose(Player<int> *) { return false; };
+    bool is_lose(Player<int> *)override { return false; };
 
-    bool is_draw(Player<int> *player);
+    bool is_draw(Player<int> *player)override;
 
-    bool game_is_over(Player<int> *player);
+    bool game_is_over(Player<int> *player)override;
 
     bool is_valid_number_for_player(int num, Player<int> *player);
 
-    vector<int> get_used_numbers() const;
+    vector<int> get_used_numbers()const;
 
     int get_cell(int x, int y) const;
 

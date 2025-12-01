@@ -18,7 +18,7 @@ using namespace std;
 int display_menu_and_get_choice() {
     cout << "\n=========================================\n";
     cout << "          CS213 - Games Menu\n";
-    cout << "=========================================\n";
+    cout << "===========================================\n";
 
     cout << "WELLCOME TO (PROJECT NAME)\n";
     cout << "1. SUS\n";
