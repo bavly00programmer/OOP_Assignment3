@@ -15,7 +15,6 @@ using namespace std;
 //--------------------------------------- infinity_Board Implementation
 
 infinity_Board::infinity_Board() : Board(3, 3) {
-    // Initialize all cells with blank_symbol
     for (auto &row: board)
         for (auto &cell: row)
             cell = blank_symbol;

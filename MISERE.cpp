@@ -23,7 +23,6 @@ MISERE_Board::~MISERE_Board() {
 
 }
 
-
 bool MISERE_Board::update_board(Move<char>* move) {
     int x=move->get_x();
     int y=move->get_y();

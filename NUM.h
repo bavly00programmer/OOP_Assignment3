@@ -25,7 +25,6 @@ public:
 
     bool is_valid_number_for_player(int num, Player<int> *player);
 
-    // 🔹 أضف التصريحات دي لأنها مستخدمة في .cpp
     vector<int> get_used_numbers() const;
 
     int get_cell(int x, int y) const;

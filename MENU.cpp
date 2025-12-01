@@ -2,11 +2,15 @@
 // Created by HP on 11/11/2025.
 //
 #include<iostream>
+#include"BoardGame_Classes.h"
+#include "fourInRow.h"
 #include "NUM.h"
 #include"SUS.h"
 #include "Help_Function.h"
 #include "InfinityTic-Tac-Toe.h"
 #include "MISERE.h"
+#include "xo4x4.h"
+#include "OBgame.h"
 using namespace std;
 
 // NUM.cpp
@@ -45,116 +49,23 @@ bool playAgain() {
     return choice == 1;
 }
 
+template<typename T>
 
-void numericalTicTacToeRun() {
-    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+void run_game(Board<T> *game_board, UI<T> *game_ui) {
+    srand(static_cast<unsigned int>(time(0)));
 
-    // Create an instance of the specific UI for Numerical Tic-Tac-Toe
-    NUM_UI *game_ui = new NUM_UI();
+    Player<T> **players = game_ui->setup_players();
+    GameManager<T> game(game_board, players, game_ui);
+    game.run();
 
-    // Create the game board
-    Board<int> *num_board = new NUM_Board();
-
-    // Set up players (returns dynamically allocated array of Player pointers)
-    Player<int> **players = game_ui->setup_players();
-
-    // Create the game manager
-    GameManager<int> num_game(num_board, players, game_ui);
-
-    // Run the game loop
-    num_game.run();
-
-    // --- Cleanup ---
-    delete num_board;
-    delete game_ui;
-
+    // Cleanup
+    delete game_board;
     for (int i = 0; i < 2; ++i)
         delete players[i];
-
     delete[] players;
-}
-
-void SUSRun() {
-    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
-
-    // Create an instance of the specific UI for SUS
-    SUS_UI *game_ui = new SUS_UI();
-
-    // Create the game board
-    Board<char> *SUS_board = new SUS_Board();
-
-    // Set up players (returns dynamically allocated array of Player pointers)
-    Player<char> **players = game_ui->setup_players();
-
-    // Create the game manager
-    GameManager<char> SUS_game(SUS_board, players, game_ui);
-
-    // Run the game loop
-    SUS_game.run();
-
-    // --- Cleanup ---
-    delete SUS_board;
     delete game_ui;
-
-    for (int i = 0; i < 2; ++i)
-        delete players[i];
-
-    delete[] players;
 }
-void infinityRun() {
-    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
 
-    // Create an instance of the specific UI for SUS
-    infinity_UI *game_ui = new infinity_UI();
-
-    // Create the game board
-    Board<char> *infinity_board = new infinity_Board();
-
-    // Set up players (returns dynamically allocated array of Player pointers)
-    Player<char> **players = game_ui->setup_players();
-
-    // Create the game manager
-    GameManager<char> infinity_game(infinity_board, players, game_ui);
-
-    // Run the game loop
-    infinity_game.run();
-
-    // --- Cleanup ---
-    delete infinity_board;
-    delete game_ui;
-
-    for (int i = 0; i < 2; ++i)
-        delete players[i];
-
-    delete[] players;
-}
-void misereTicTacToeRun(){
-srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
-
-    // Create an instance of the specific UI for Misère Tic-Tac-Toe
-    MISERE_UI *game_ui = new MISERE_UI();
-
-    // Create the game board
-    Board<char> *misere_board = new MISERE_Board();
-
-    // Set up players (returns dynamically allocated array of Player pointers)
-    Player<char> **players = game_ui->setup_players();
-
-    // Create the game manager
-    GameManager<char> misere_game(misere_board, players, game_ui);
-
-    // Run the game loop
-    misere_game.run();
-
-    // --- Cleanup ---
-    delete misere_board;
-    delete game_ui;
-
-    for (int i = 0; i < 2; ++i)
-        delete players[i];
-
-    delete[] players;
-}
 
 int main() {
     int choice;
@@ -168,13 +79,14 @@ int main() {
             break;
             case 1: {
                 do {
-                    SUSRun();
-                    cout << "Thank you for playing!\n";
+                    run_game(new SUS_Board, new SUS_UI);
                 } while (playAgain());
                 break;
             }
             case 2: {
-                cout << "This game is under construction!" << endl;
+                do {
+                    run_game(new fourBoard, new fourUI);
+                } while (playAgain());
                 break;
             }
             case 3: {
@@ -186,9 +98,10 @@ int main() {
                 break;
             }
             case 5: {
-                do{
-                   misereTicTacToeRun();
-                  }while(playAgain());
+                do {
+                    run_game(new MISERE_Board, new MISERE_UI);
+                    cout << "Thank you for playing!\n";
+                } while (playAgain());
                 break;
             }
             case 6: {
@@ -196,7 +109,9 @@ int main() {
                 break;
             }
             case 7: {
-                cout << "This game is under construction!" << endl;
+                do {
+                    run_game(new X_O_Board, new XO_UI);
+                } while (playAgain());
                 break;
             }
             case 8: {
@@ -205,19 +120,20 @@ int main() {
             }
             case 9: {
                 do {
-                    numericalTicTacToeRun();
-                    cout << "Thank you for playing!\n";
+                    run_game(new NUM_Board, new NUM_UI);
                 } while (playAgain());
                 break;
             }
             case 10: {
-                cout << "This game is under construction!" << endl;
+                do {
+
+                    run_game(new ObstaclesBoard, new ObstaclesUI);
+                } while (playAgain());
                 break;
             }
             case 11: {
                 do {
-                   infinityRun();
-                    cout << "Thank you for playing!\n";
+                    run_game(new infinity_Board, new infinity_UI);
                 } while (playAgain());
                 break;
             }

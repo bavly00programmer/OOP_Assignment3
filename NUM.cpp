@@ -9,7 +9,6 @@
 #include"Help_Function.h"
 using namespace std;
 
-//--------------------------------------- Helper Function
 
 
 //--------------------------------------- NUM_Board Implementation

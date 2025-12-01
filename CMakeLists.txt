@@ -1,10 +1,24 @@
 cmake_minimum_required(VERSION 3.30)
-project(oopcpp3)
+project(OOPa3)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(oopcpp3
+add_executable(OOPa3
+        fourInRow.cpp
+        fourInRow.h
+        Help_Function.h
+        Help_Function.cpp
+        InfinityTic-Tac-Toe.cpp
+        InfinityTic-Tac-Toe.h
         MENU.cpp
-        NUM.cpp
+        MISERE.cpp
+        MISERE.h
         NUM.h
+        NUM.cpp
+        OBgame.cpp
+        OBgame.h
+        SUS.cpp
+        SUS.h
+        xo4x4.h
+        xo4x4.cpp
 )

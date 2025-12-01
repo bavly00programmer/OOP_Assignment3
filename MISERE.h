@@ -5,7 +5,7 @@
 #ifndef MISERE_H
 #define MISERE_H
 #include "BoardGame_Classes.h"
-#include "Help_Function.h"\
+#include "Help_Function.h"
 
 using namespace std;
 
@@ -15,6 +15,7 @@ using namespace std;
  * @brief represents the Misere tic-tac-toe game board.
  * @see Board
  */
+
 class MISERE_Board : public Board<char> {
 private:
     char blank_symbol = '.';
