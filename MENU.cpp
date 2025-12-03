@@ -11,6 +11,7 @@
 #include "MISERE.h"
 #include "xo4x4.h"
 #include "OBgame.h"
+#include "DIAMOND.h"
 using namespace std;
 
 // NUM.cpp
@@ -105,7 +106,10 @@ int main() {
                 break;
             }
             case 6: {
-                cout << "This game is under construction!" << endl;
+                do{
+                    run_game(new DIAMOND_Board, new DIAMOND_UI);
+                    cout <<"Thank you for playing\n";
+                }while (playAgain());
                 break;
             }
             case 7: {
