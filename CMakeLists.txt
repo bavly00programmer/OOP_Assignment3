@@ -21,4 +21,6 @@ add_executable(OOPa3
         SUS.h
         xo4x4.h
         xo4x4.cpp
+        DIAMOND.cpp
+        DIAMOND.h
 )
