@@ -15,33 +15,34 @@ private:
 public:
 
     memory_Board();
-    bool update_board(Move<char>* move)override;
+    ~memory_Board()override;
 
+    bool update_board(Move<char>* move)override;
 
     bool is_win(Player<char>* player)override;
 
-    bool is_lose(Player<char>*) {
-        return false;
-    };
+    bool is_lose(Player<char>*) override;
 
     bool is_draw(Player<char>* player)override;
 
     bool game_is_over(Player<char>* player)override;
+
 };
 
 class memory_UI : public UI<char> {
+
 public:
 
     memory_UI();
 
-    ~memory_UI() {};
+    ~memory_UI() override;
 
 
 
-    Player<char>* create_player(string& name, char symbol, PlayerType type);
+    Player<char>* create_player(string& name, char symbol, PlayerType type)override;
 
 
-    virtual Move<char>* get_move(Player<char>* player)override;
+     Move<char>* get_move(Player<char>* player) override;
 };
 
 #endif //MEMORY_H
