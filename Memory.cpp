@@ -70,7 +70,8 @@ bool memory_Board::is_draw(Player<char> *player) {
 }
 
 bool memory_Board::is_lose(Player<char> *player) {
-    return false;
+    if (n_moves < rows * columns) return false;
+    return !is_win(player);
 }
 
 bool memory_Board::game_is_over(Player<char> *player) {
