@@ -12,6 +12,7 @@
 #include "xo4x4.h"
 #include "OBgame.h"
 #include "DIAMOND.h"
+#include "Pyramid.h"
 using namespace std;
 
 // NUM.cpp
@@ -119,7 +120,9 @@ int main() {
                 break;
             }
             case 8: {
-                cout << "This game is under construction!" << endl;
+                do {
+                    run_game(new pyramid_Board, new pyramid_UI);
+                } while (playAgain());
                 break;
             }
             case 9: {
