@@ -20,7 +20,6 @@ memory_Board::memory_Board() : Board(3, 3) {
             cell = blank_symbol;
     hidden_board = vector<vector<char>>(rows, vector<char>(columns, blank_symbol));
 }
-memory_Board::~memory_Board() {}
 
 bool memory_Board::update_board(Move<char>* move) {
     int x = move->get_x();
@@ -56,19 +55,17 @@ bool memory_Board::is_win(Player<char>* player) {
     }
 
     // Check diagonals
-    if ((all_equal(board[0][0], board[1][1], board[2][2]) && board[1][1] == sym) ||
-        (all_equal(board[0][2], board[1][1], board[2][0]) && board[1][1] == sym))
+    if ((all_equal(hidden_board[0][0], hidden_board[1][1], hidden_board[2][2]) && hidden_board[1][1] == sym) ||
+        (all_equal(hidden_board[0][2], hidden_board[1][1], hidden_board[2][0]) && hidden_board[1][1] == sym))
         return true;
 
     return false;
 }
+
 bool memory_Board::is_draw(Player<char>* player) {
     return (n_moves == 9 && !is_win(player));
 }
-bool memory_Board::is_lose(Player<char> *player) {
-    if (n_moves < rows * columns) return false;
-    return !is_win(player);
-}
+
 bool memory_Board::game_is_over(Player<char>* player) {
     return is_win(player) || is_draw(player);
 }
@@ -76,7 +73,7 @@ bool memory_Board::game_is_over(Player<char>* player) {
 //UI Implementation
 
 memory_UI::memory_UI() : UI<char>("Weclome to FCAI Memory Tic-Tac-Toe", 3) {}
-memory_UI::~memory_UI() {};
+
 
 
 
@@ -105,4 +102,3 @@ Move<char>* memory_UI::get_move(Player<char>* player) {
     }
     return new Move<char>(x, y, player->get_symbol());
 }
-
