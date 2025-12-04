@@ -13,6 +13,7 @@
 #include "OBgame.h"
 #include "DIAMOND.h"
 #include "Pyramid.h"
+#include "Memory.h"
 using namespace std;
 
 // NUM.cpp
@@ -34,9 +35,11 @@ int display_menu_and_get_choice() {
     cout << "9. Numerical Tic-Tac-Toe\n";
     cout << "10. Obstacles Tic-Tac-Toe\n";
     cout << "11. Infinity Tic-Tac-Toe\n";
+    cout << "12. Ultimate Tic Tac Toe\n";
+    cout << "13. Memory Tic-Tac-Toe\n";
     cout << "0 - Exit Application\n\n";
 
-    int choice = getChoice(0, 11);
+    int choice = getChoice(0, 13);
     cout << "\n\n";
     return choice;
 }
@@ -67,6 +70,7 @@ void run_game(Board<T> *game_board, UI<T> *game_ui) {
     delete[] players;
     delete game_ui;
 }
+
 
 
 int main() {
@@ -144,6 +148,17 @@ int main() {
                 } while (playAgain());
                 break;
             }
+            case 12: {
+                cout << "This game is under construction!" << endl;
+                break;
+            }
+            case 13: {
+                do {
+                    run_game(new memory_Board, new memory_UI);
+                } while (playAgain());
+                break;
+            }
+
             default: {
                 cout << "Invalid choice!" << endl;
                 break;
