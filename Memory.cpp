@@ -66,7 +66,8 @@ bool memory_Board::is_draw(Player<char>* player) {
     return (n_moves == 9 && !is_win(player));
 }
 bool memory_Board::is_lose(Player<char> *player) {
-    return false;
+    if (n_moves < rows * columns) return false;
+    return !is_win(player);
 }
 bool memory_Board::game_is_over(Player<char>* player) {
     return is_win(player) || is_draw(player);
@@ -104,3 +105,4 @@ Move<char>* memory_UI::get_move(Player<char>* player) {
     }
     return new Move<char>(x, y, player->get_symbol());
 }
+
