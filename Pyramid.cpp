@@ -63,7 +63,7 @@ bool pyramid_Board::update_board(Move<char>* move) {
 bool pyramid_Board::is_win(Player<char>* player) {
     char sym = player->get_symbol();
 
-    // Bottom row: 4 possibilities
+    // check Row: 4 possibilities
     if (board[1][1] == sym && board[1][2] == sym && board[1][3] == sym)
         return true;
 
@@ -76,15 +76,15 @@ bool pyramid_Board::is_win(Player<char>* player) {
     if (board[2][2] == sym && board[2][3] == sym && board[2][4] == sym)
         return true;
 
-    // Column 2
+    //check Column 2
     if (board[0][2] == sym && board[1][2] == sym && board[2][2] == sym)
         return true;
 
-    // Diagonal
+    //check Diagonal
     if (board[0][2] == sym && board[1][3] == sym && board[2][4] == sym)
         return true;
 
-    // Anti_diagonal
+    //check Anti_diagonal
     if (board[0][2] == sym && board[1][1] == sym && board[2][0] == sym)
         return true;
 
@@ -146,4 +146,5 @@ Move<char>* pyramid_UI::get_move(Player<char>* player) {
     }
     return new Move<char>(x, y, player->get_symbol());
 }
+
 
