@@ -18,7 +18,7 @@ private:
 
 public:
    DIAMOND_Board();
-   ~DIAMOND_Board() {}
+   ~DIAMOND_Board() override {}
 
 bool update_board(Move<char>* move) override;
 bool is_win(Player<char>* player) override;
@@ -30,6 +30,9 @@ bool game_is_over(Player<char>* player) override;
 bool is_valid_cell(int x, int y) const;
 bool check_line_of_three(Player<char>* player) const;
 bool check_line_of_four(Player<char>* player) const;
+int evaluate(char ai, char human);
+int minimax(char ai, char human, bool maximizing);
+pair<int,int> find_best_move(char ai, char human);
 void get_diamond_position(vector<pair<int, int>>& positions) const;
 
 private:
@@ -41,7 +44,7 @@ static const vector<pair<int, int>> DIAMOND_CELLS;
 class DIAMOND_UI : public UI<char> {
 public:
 DIAMOND_UI();
-~DIAMOND_UI() {}
+~DIAMOND_UI() override {}
  Player<char>* create_player(string& name, char symbol,PlayerType type) override;
  Move<char>* get_move(Player<char>* player) override;
  Player<char>** setup_players() override;
@@ -54,3 +57,4 @@ bool is_diamond_position(int x, int y) const;
 
 
 #endif //DIAMOND_H
+
