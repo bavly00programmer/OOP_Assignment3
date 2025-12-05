@@ -40,13 +40,7 @@ bool ultimateBoard::update_board(Move<char> *move) {
     if (board[x][y] != BlankSymbol) return false;
 
     if (currentBoard == -1) {
-
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
-                if (board[row][col] == '#') board[row][col] = BlankSymbol;
-            }
-        }
-
+        
         board[x][y] = symbol;
         currentBoard = getCurrentBoard(x, y);
 
