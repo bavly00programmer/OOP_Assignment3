@@ -39,6 +39,76 @@ bool MISERE_Board::update_board(Move<char>* move) {
     n_moves++;
     return true;
 }
+
+int MISERE_Board::evaluate(char ai, char human) {
+    Player<char> pAI("AI", ai , PlayerType::COMPUTER);
+    Player<char> pHuman("Human", human, PlayerType::HUMAN);
+    if (is_lose(&pAI)) return -10; //AI made 3 in row(bad)
+    if (is_lose(&pHuman)) return +10; // Human made 3 (AI wins)
+    return 0;
+}
+
+int MISERE_Board::minimax(char ai, char human, bool maximizing) {
+    int score =  evaluate(ai,human);
+
+    if (score ==10 || score == -10)
+        return score;
+    if (n_moves == 9)
+        return 0;
+    if (maximizing) {
+        int best = -1000;
+        for (int i=0;i<3;i++) {
+            for (int j=0;j<3;j++) {
+                if (board[i][j] == '.') {
+                    board[i][j] = ai;
+                    n_moves++;
+
+                    best = max(best, minimax(ai, human, false));
+                    board[i][j]='.';
+                    n_moves--;
+                }
+            }
+        }
+        return best;
+    }else {
+        int best = 1000;
+        for (int i=0;i<3;i++) {
+            for (int j=0;j<3;j++) {
+                if (board[i][j] == '.') {
+                    board[i][j] = human;
+                    n_moves++;
+                    best = max(best, minimax(ai, human, true));
+                    board[i][j]='.';
+                    n_moves--;
+                }
+            }
+        }
+        return best;
+    }
+
+}
+
+pair<int,int> MISERE_Board::find_best_move(char ai, char human) {
+    int bestValue = -1000;
+    pair<int,int> bestMove= {-1,-1};
+    for (int i=0;i<3;i++) {
+        for (int j=0;j<3;j++) {
+            if (board[i][j] == '.') {
+                board[i][j] = ai;
+                n_moves++;
+                int value = minimax(ai,human,false);
+                board[i][j] = '.';
+                n_moves--;
+                if (value > bestValue) {
+                    bestValue = value;
+                    bestMove = {i,j};
+                }
+            }
+        }
+    }
+    return bestMove;
+}
+
 bool MISERE_Board::is_win(Player<char>* player) {
     char symbol=player->get_symbol();
     char opponent_symbol = (symbol=='X')?'O':'X';
@@ -119,15 +189,20 @@ x=getChoice(0 ,2);
         cout << "Column (0-2): ";
        y=getChoice(0 ,2);
     } else {
-        // Computer move - simple random strategy
-        // In Misère Tic-Tac-Toe, computer should try to avoid making three in a row
-        x = rand() % 3;
-        y = rand() % 3;
+        // Computer move - smart ai mode
+        MISERE_Board* b= dynamic_cast<MISERE_Board*>(player->get_board_ptr());
+
+        char ai= player->get_symbol();
+        char human= (ai == 'X')?'O':'X';
+        auto best = b->find_best_move(ai,human);
+        x = best.first;
+        y = best.second;
         cout << "Computer chooses: (" << x << ", " << y << ")" << endl;
     }
 
     return new Move<char>(x, y, player->get_symbol());
 }
+
 
 
 
