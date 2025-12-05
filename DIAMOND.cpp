@@ -127,6 +127,79 @@ return true;
 return false;
 
 }
+//AI smart code
+int DIAMOND_Board::evaluate(char ai, char human) {
+    Player<char> pAI("AI", ai, PlayerType::COMPUTER);
+    Player<char> pHUMAN("HUMAN", human , PlayerType::HUMAN);
+
+    if (is_win(&pAI)) return +10;
+    if (is_win(&pHUMAN)) return -10;
+
+    return 0;
+}
+//minimax
+int DIAMOND_Board::minimax(char ai, char human, bool maximizing) {
+    int score = evaluate(ai,human);
+
+    if (score ==10 || score == -10)
+        return score;
+
+    if (n_moves ==13)
+        return 0;
+     if (maximizing) {
+         int best = -1000;
+         for (auto &pos : DIAMOND_CELLS) {
+             int x = pos.first , y = pos.second;
+             if (board[x][y]=='.') {
+                 board[x][y]=ai;
+                 n_moves++;
+
+                 best = max(best, minimax(ai,human,false));
+
+                 board[x][y]='.';
+                 n_moves--;
+             }
+         }
+         return best;
+     }else {
+         int best = 1000;
+         for (auto &pos : DIAMOND_CELLS) {
+             int x = pos.first , y = pos.second;
+             if (board[x][y]=='.') {
+                 board[x][y]=human;
+                    n_moves++;
+
+                 best = min(best, minimax(ai,human,true));
+                 board[x][y]='.';
+                 n_moves--;
+             }
+         }
+         return best;
+     }
+}
+pair<int,int> DIAMOND_Board::find_best_move(char ai, char human) {
+    int bestValue = -1000;
+    pair<int,int> bestMove = {-1, -1};
+
+    for (auto &pos : DIAMOND_CELLS) {
+        int x = pos.first , y = pos.second;
+        if (board[x][y]=='.') {
+            board[x][y]=ai;
+            n_moves++;
+
+            int moveVal = minimax(ai,human,false);
+            board[x][y]='.';
+            n_moves--;
+
+            if (moveVal > bestValue) {
+                bestValue = moveVal;
+                bestMove = pos;
+            }
+        }
+    }
+    return bestMove;
+}
+
 bool DIAMOND_Board::is_win(Player<char>* player) {
    return check_line_of_three(player) && check_line_of_four(player);
 }
@@ -200,46 +273,22 @@ Move<char> *DIAMOND_UI::get_move(Player<char>* player) {
             }
         }
     }else {
-        //computer player - choose random diamond position
-        vector<pair<int,int>> diamond_cells = {
-            {0, 2},
-            {1, 1}, {1, 2}, {1, 3},
-            {2, 0}, {2, 1}, {2, 2}, {2, 3}, {2, 4},
-            {3, 1}, {3, 2}, {3, 3},
-            {4, 2}
-        };
-        //check for empty cells
-        DIAMOND_Board* boardPtr = dynamic_cast<DIAMOND_Board*>(player->get_board_ptr());
-        if (boardPtr) {
-            //find all empty cells
-            vector<pair<int,int>> empty_cells;
-            for (const auto& pos : diamond_cells) {
-                if (boardPtr->get_board_matrix()[pos.first][pos.second] == '.') {
-                    empty_cells.push_back(pos);
-                }
-            }
-            if (!empty_cells.empty()) {
-                int index = rand() % empty_cells.size();
-                x= empty_cells[index].first;
-                y= empty_cells[index].second;
-            }else{
-                // all cells filled
-                x=0; y=2;
-            }
-        }else {
-            //fallback
-            x= rand()%5;
-            y= rand()%5;
-            //make sure it's diamond pos
-            while (!is_diamond_position(x,y)) {
-                x=rand()%5;
-                y=rand()%5;
-            }
-        }
+        //computer player 
+       DIAMOND_Board* boardPtr  = dynamic_cast<DIAMOND_Board*>(player->get_board_ptr());
+
+        char ai = player->get_symbol();
+        char human = (ai == 'X')? 'O':'X';
+
+        pair<int,int> bestMove = boardPtr->find_best_move(ai, human);
+
+        x = bestMove.first;
+        y = bestMove.second;
+
         cout<<"Computer chooses position: (" << x << ", " << y << ")\n";
     }
     return new Move<char>(x, y, player->get_symbol());
 }
+
 
 
 
