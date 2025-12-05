@@ -38,13 +38,36 @@ bool ultimateBoard::update_board(Move<char> *move) {
     if (!(0 <= x && x < rows && 0 <= y && y < columns)) return false;
 
     if (board[x][y] != BlankSymbol) return false;
-    
+
     if (currentBoard == -1) {
-        currentBoard = getCurrentBoard(x, y);
+
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == '#') board[row][col] = BlankSymbol;
+            }
+        }
 
         board[x][y] = symbol;
+        currentBoard = getCurrentBoard(x, y);
+
+
         n_moves++;
+
+  //lock all cells outside mini-boards
+        int i = getindexI(currentBoard);
+        int j = getindexJ(currentBoard);
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (!((row >= i && row < i + 3) && (col >= j && col < j + 3))
+                    && board[row][col] == BlankSymbol ){
+
+                    board[row][col] = blockSymbol;
+
+                    }
+            }
+        }
         return true;
+
     }
 
     board[x][y] = symbol;
@@ -138,12 +161,31 @@ bool ultimateBoard::is_win(Player<char> *player) {
                 }
             }
         }
+
+     //Return cells available if win
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == blockSymbol) {
+                    board[row][col] = BlankSymbol;
+                }
+            }
+        }
+
         return check_the_mainboard(player);
     }
 
     if (n_moves % 9 == 0) {
         mainboard[i / 3][j / 3] = '0';
         currentBoard = -1;
+
+        ////Return cells available if draw
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == blockSymbol) {
+                    board[row][col] = BlankSymbol;
+                }
+            }
+        }
         return check_the_mainboard(player);
     }
 
