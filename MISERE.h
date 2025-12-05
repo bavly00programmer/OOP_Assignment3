@@ -26,7 +26,10 @@ public:
      */
     MISERE_Board();
 
-    ~MISERE_Board();
+    ~MISERE_Board() override;
+int evaluate(char ai, char human);
+int minimax(char ai,char human, bool maximizing);
+pair<int,int> find_best_move(char ai,char human);
 
     /**
      *@breif updates the board with a player's move'
@@ -91,3 +94,4 @@ public:
 
 
 #endif //MISERE_H
+
