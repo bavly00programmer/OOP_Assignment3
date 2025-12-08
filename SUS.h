@@ -77,7 +77,7 @@ public:
      * @param boardPtr Pointer to the board to check
      * @return Number of complete "SUS" sequences on the board
      */
-     int count_sequences(SUS_Board *board);
+     int count_sequences(SUS_Board *boardPtr);
 
 };
 
@@ -107,13 +107,13 @@ public:
      * @param type Player type (Human or Computer)
      * @return Pointer to created Player object
      */
-    Player<char> *create_player(string &name, char symbol, PlayerType type);
+    Player<char> *create_player(string &name, char symbol, PlayerType type)override;
 /**
      * @brief Get a move from a player
      * @param player Pointer to the current player
      * @return Pointer to the Move object
      */
-    Move<char> *get_move(Player<char> *) override;
+    Move<char> *get_move(Player<char> *player) override;
  /**
      * @brief Setup two players for the game
      * @return Array of 2 Player pointers
