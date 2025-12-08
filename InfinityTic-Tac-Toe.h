@@ -43,31 +43,31 @@ public:
      * @return true if move was successful, false otherwise
      * @details Removes oldest move when 4 moves have been made (keeps only last 3)
      */
-    bool update_board(Move<char> *move);
+    bool update_board(Move<char> *move) override;
 /**
      * @brief Check if the player has won
      * @param player Pointer to the player to check
      * @return true if player has 3 pieces in a row with current visible pieces
      */
-    bool is_win(Player<char> *player);
+    bool is_win(Player<char> *player) override;
 /**
      * @brief Check if the player has lost
      * @param player Pointer to the player to check
      * @return false (lose condition not used in this game)
      */
-    bool is_lose(Player<char> *) { return false; };
+    bool is_lose(Player<char> *player)override { return false; };
 /**
      * @brief Check if the player has lost
      * @param player Pointer to the player to check
      * @return false (lose condition not used in this game)
      */
-    bool is_draw(Player<char> *player);
+    bool is_draw(Player<char> *player) override;
   /**
      * @brief Check if the game is over
      * @param player Pointer to the current player
      * @return true if game is over (win or draw)
      */
-    bool game_is_over(Player<char> *player);
+    bool game_is_over(Player<char> *player)override;
 };
 
 /**
@@ -95,7 +95,7 @@ public:
      * @param type Player type (Human or Computer)
      * @return Pointer to created Player object
      */
-    Player<char> *create_player(string &name, char symbol, PlayerType type);
+    Player<char> *create_player(string &name, char symbol, PlayerType type) override;
 /**
      * @brief Get a move from a player
      * @param player Pointer to the current player
