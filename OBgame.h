@@ -46,27 +46,27 @@ public:
 /**
      * @brief Check if the game is a draw
      * @param player Pointer to the current player
-     * @return true if board is full with no winner
+     * @return true if board is full of no winner
      */
-    bool is_draw(Player<char> *) override;
+    bool is_draw(Player<char> *player) override;
  /**
      * @brief Check if the player has lost
      * @param player Pointer to the player to check
      * @return true if player has lost (opponent has 4 in a row)
      */
-    bool is_lose(Player<char> *) override;
+    bool is_lose(Player<char> *player) override;
 /**
      * @brief Check if the player has won
      * @param player Pointer to the player to check
      * @return true if player has 4 pieces in a row
      */
-    bool is_win(Player<char> *) override;
+    bool is_win(Player<char> *player) override;
  /**
      * @brief Check if the game is over
      * @param player Pointer to the current player
      * @return true if game is over (win, lose, or draw)
      */
-    bool game_is_over(Player<char> *) override;
+    bool game_is_over(Player<char> *player) override;
 };
 
 
@@ -105,7 +105,7 @@ public:
      * @param player Pointer to the current player
      * @return Pointer to the Move object
      */
-    Move<char> *get_move(Player<char> *) override;
+    Move<char> *get_move(Player<char> *player) override;
 };
 
 #endif //OBgame_H
