@@ -49,9 +49,9 @@ public:
  /**
      * @brief Check if the player has lost
      * @param player Pointer to the player to check
-     * @return false (this game doesn't have a lose condition)
+     * @return false (this game doesn't have a loose condition)
      */
-    bool is_lose(Player<char>*) {
+    bool is_lose(Player<char>* player) override; {
         return false;
     };
 /**
@@ -91,7 +91,7 @@ public:
      * @param type Player type (Human or Computer)
      * @return Pointer to created Player object
      */
-    Player<char>* create_player(string& name, char symbol, PlayerType type);
+    Player<char>* create_player(string& name, char symbol, PlayerType type) override;
 
     /**
      * @brief Setup two players for the game
@@ -106,8 +106,9 @@ public:
      * @details For human players, prompts for row and column input
      *          For computer players, selects random valid position
      */
-    virtual Move<char>* get_move(Player<char>* player)override;
+   Move<char>* get_move(Player<char>* player)override;
 };
 
 #endif //PYRAMID_H
+
 
