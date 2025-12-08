@@ -49,7 +49,7 @@ public:
      */
 int evaluate(char ai, char human);
 /**
-     * @brief Minimax algorithm for AI decision making
+     * @brief Minimax algorithm for AI decision-making
      * @param ai AI player symbol
      * @param human Human player symbol
      * @param maximizing Whether it's the maximizing player's turn
@@ -122,8 +122,7 @@ public:
     /**
     *@brief Destructor
      */
-    ~MISERE_UI() {
-    };
+    ~MISERE_UI() override = default;
 
     /**
      * @brief Create a player of the specified type
@@ -145,5 +144,6 @@ public:
 
 
 #endif //MISERE_H
+
 
 
