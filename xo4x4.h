@@ -54,7 +54,7 @@ public:
      * @param player Pointer to the player to check
      * @return false (lose condition not used in this game)
      */
-    bool is_lose(Player<char> *) override { return false; };
+    bool is_lose(Player<char> *player) override { return false; };
 /**
      * @brief Check if the game is a draw
      * @param player Pointer to the current player
