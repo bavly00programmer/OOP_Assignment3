@@ -55,7 +55,7 @@ public:
      * @param player Pointer to the player to check
      * @return true if board is full and player hasn't won
      */
-    bool is_lose(Player<char>*) override;
+    bool is_lose(Player<char>*player) override;
  /**
      * @brief Check if the game is a draw
      * @param player Pointer to the current player
@@ -108,4 +108,5 @@ public:
 };
 
 #endif //MEMORY_H
+
 
