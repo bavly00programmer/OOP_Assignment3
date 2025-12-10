@@ -77,7 +77,7 @@ int MISERE_Board::minimax(char ai, char human, bool maximizing) {
                 if (board[i][j] == '.') {
                     board[i][j] = human;
                     n_moves++;
-                    best = max(best, minimax(ai, human, true));
+                    best = min(best, minimax(ai, human, true));
                     board[i][j]='.';
                     n_moves--;
                 }
@@ -116,22 +116,22 @@ bool MISERE_Board::is_win(Player<char>* player) {
     //In Misère Tic-Tac-Toe, you WIN if the OPPONENT has three in a row
     // Check if opponent has three in any row
     for (int i=0;i<rows;i++) {
-        if (board[i][0]==opponent_symbol && board[i][1]==symbol && board[i][2]==opponent_symbol)
+        if (board[i][0]==opponent_symbol && board[i][1]==opponent_symbol && board[i][2]==opponent_symbol)
             return true;
     }
 
     // check if opponent has three in any column
     for (int j =0;j<columns;j++) {
-        if (board[0][j]==opponent_symbol && board[1][j]==symbol && board[2][j]==opponent_symbol)
+        if (board[0][j]==opponent_symbol && board[1][j]==opponent_symbol && board[2][j]==opponent_symbol)
             return true;
     }
 
     //check if opponent has three in anti-diagonal
-    if (board[0][2]== opponent_symbol && board[1][1]==symbol && board[2][0]==opponent_symbol)
+    if (board[0][2]== opponent_symbol && board[1][1]==opponent_symbol && board[2][0]==opponent_symbol)
         return true;
 
     //check if opponent has three in diagonal
-    if (board[0][0] && board[1][1]==symbol && board[2][2]==opponent_symbol)
+    if (board[0][0]== opponent_symbol && board[1][1]==opponent_symbol && board[2][2]==opponent_symbol)
         return true;
     return false;
 }
