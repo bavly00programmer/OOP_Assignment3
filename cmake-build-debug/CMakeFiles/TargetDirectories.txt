@@ -1,3 +1,0 @@
-C:/OOPA3/cmake-build-debug/CMakeFiles/OOPa3.dir
-C:/OOPA3/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/OOPA3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
