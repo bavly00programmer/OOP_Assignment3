@@ -1,0 +1,29 @@
+# Build directory
+cmake-build-debug/
+cmake-build-release/
+build/
+out/
+
+# IDE files
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled object files and libraries
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+*.a
+*.lib
+
+# Logs and databases
+*.log
+
+# Backup files
+*~
+*.swp
