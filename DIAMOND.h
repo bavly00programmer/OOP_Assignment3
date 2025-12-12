@@ -20,7 +20,7 @@ using namespace std;
  * @class DIAMOND_Board
  * @brief Board implementation for Diamond Tic-Tac-Toe
  * @extends Board<char>
- * 
+ *
  * Implements a 5x5 board where only diamond-shaped cells are playable.
  * Win condition requires both a line of 3 and a line of 4.
  */
@@ -101,10 +101,12 @@ int evaluate(char ai, char human);
      * @brief Minimax algorithm for AI decision making
      * @param ai AI player symbol
      * @param human Human player symbol
+     * @param alpha the best value that the maximizer currently can guarantee
+     * @param beta the best value that the minimizer currently can guarantee
      * @param maximizing Whether it's the maximizing player's turn
      * @return Best score from current board state
      */
-int minimax(char ai, char human, bool maximizing);
+int minimax(char ai, char human, bool maximizing, int alpha, int beta ,int depth);
 /**
      * @brief Find best move for AI using minimax
      * @param ai AI player symbol
@@ -117,6 +119,9 @@ pair<int,int> find_best_move(char ai, char human);
      * @param positions Reference to vector to fill with positions
      */
 void get_diamond_position(vector<pair<int, int>>& positions) const;
+//fast helper that takes a char instead of a player  object
+     bool check_win_fast(char symbol);
+
 
 private:
 ///<pre-defined diamond positions in a 5x5 grid
@@ -138,9 +143,7 @@ DIAMOND_UI();
  /**
      * @brief Destructor
      */
-~DIAMOND_UI() override ;
-
-
+~DIAMOND_UI() override {}
  /**
      * @brief Create a player instance
      * @param name Player's name
@@ -170,10 +173,10 @@ private:
      * @return true if position is valid diamond cell
      */
 bool is_diamond_position(int x, int y) const;
+
 };
 
 
 
 #endif //DIAMOND_H
-
 
