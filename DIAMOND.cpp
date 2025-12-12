@@ -9,13 +9,15 @@
 using namespace std;
 //Diamond shape position in a 5x5 grid
 const vector<pair<int, int>> DIAMOND_Board::DIAMOND_CELLS = {
-{0,2},//top
-{1,1}, {1,2}, {1,3},//second row
-{2,0}, {2,1},{2,2}, {2,3},{2,4}, //middle row
-{3,1}, {3,2}, {3,3}, //fourth row
-{4,2}  //bottom
+    {0,3},                                   // Row 0 (1 cell)
+        {1,2}, {1,3}, {1,4},                     // Row 1 (3 cells)
+        {2,1}, {2,2}, {2,3}, {2,4}, {2,5},       // Row 2 (5 cells)
+        {3,0}, {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, // Row 3 (7 cells)
+        {4,1}, {4,2}, {4,3}, {4,4}, {4,5},       // Row 4 (5 cells)
+        {5,2}, {5,3}, {5,4},                     // Row 5 (3 cells)
+        {6,3}                                    // Row 6 (1 cell)
 };
-DIAMOND_Board::DIAMOND_Board() : Board(5,5){
+DIAMOND_Board::DIAMOND_Board() : Board(7,7){
 //Initialize all cells with blank symbol
 for(auto& row : board)
    for (auto& cell : row)
@@ -39,7 +41,7 @@ int y = move->get_y();
 char symbol = move->get_symbol();
 
 //check if position is valid and within diamond shape
-if(x <0 || x >= 5 || y <0 || y >= 5)
+if(x <0 || x >= 7 || y <0 || y >= 7)
 return false;
 if(!is_valid_cell(x,y))
 return false;
@@ -94,112 +96,179 @@ return false;
 
 bool DIAMOND_Board::check_line_of_four(Player<char>* player)const {
 char s = player->get_symbol();
+    vector<pair<int, int>> positions;
+    get_diamond_position(positions);
 
-//check for lines of 4 within diamond
-//these are only possible in the middle row and middle column
+    for(const auto& start : positions) {
+        int x = start.first;
+        int y = start.second;
 
-//check middle row horizontal
-if (board[2][0] == s && board[2][1] == s && board[2][2] == s && board[2][3] == s)
-return true;
-if(board[2][1] == s && board[2][2] == s && board[2][3] == s && board[2][4] == s)
-return true;
+        // Check Horizontal (Right)
+        if(is_valid_cell(x, y+3)) { // Only need to check the furthest cell validity effectively
+            if (board[x][y] == s && board[x][y+1] == s && board[x][y+2] == s && board[x][y+3] == s)
+                return true;
+        }
 
-//check middle column vertical
-if(board[0][2] ==s && board[1][2]==s && board[2][2] == s && board[3][2] == s)
-return true;
-if (board[1][2] == s && board[2][2] == s && board[3][2] == s && board[4][2] == s)
-return true;
+        // Check Vertical (Down)
+        if(is_valid_cell(x+3, y)) {
+            if(board[x][y] == s && board[x+1][y] == s && board[x+2][y] == s && board[x+3][y] == s)
+                return true;
+        }
 
-//check diagonal only the diamond portion
-if (board [1][1] == s && board [2][2] ==s && board [3][3] == s)
-return false; //this is only 3 cells in diamond shape
+        // Check Diagonal (Down-Right)
+        if(is_valid_cell(x+3, y+3)) {
+            if(board[x][y] == s && board[x+1][y+1] == s && board[x+2][y+2] == s && board[x+3][y+3] == s)
+                return true;
+        }
 
-if (board[1][3] == s && board[2][2] ==s && board[3][1] == s)
-return false;  //this is only 3 cells in diamond shape
-
-//check for L-shaped or other patterns of 4 within diamond
-if(board[1][1] == s && board[1][2] == s && board[1][3] == s && board[2][2] == s)
-return true;
-
-if(board[1][1] == s && board[2][1] == s && board[3][1] == s && board[2][2] == s)
-return true;
-
-return false;
-
+        // Check Diagonal (Down-Left)
+        if(is_valid_cell(x+3, y-3)) {
+            if (board[x][y] == s && board[x+1][y-1] == s && board[x+2][y-2] == s && board[x+3][y-3] == s)
+                return true;
+        }
+    }
+    return false;
 }
+bool DIAMOND_Board::check_win_fast(char s) {
+    //we reuse the logic but for a simple char's'
+    vector<pair<int, int>> positions;
+    get_diamond_position(positions);
+    bool has_3=false;
+    bool has_4=false;
+    for(const auto& start : positions) {
+        int x = start.first;
+        int y = start.second;
+        //check lines of3
+        if (!has_3) {
+            // Horizontal
+            if(is_valid_cell(x, y+2) && board[x][y] == s && board[x][y+1] == s && board[x][y+2] == s) has_3 = true;
+            // Vertical
+            else if(is_valid_cell(x+2, y) && board[x][y] == s && board[x+1][y] == s && board[x+2][y] == s) has_3 = true;
+            // Diagonal Down-Right
+            else if(is_valid_cell(x+2, y+2) && board[x][y] == s && board[x+1][y+1] == s && board[x+2][y+2] == s) has_3 = true;
+            // Diagonal Down-Left
+            else if(is_valid_cell(x+2, y-2) && board[x][y] == s && board[x+1][y-1] == s && board[x+2][y-2] == s) has_3 = true;
+        }
+        // --- Check Lines of 4 ---
+        if(!has_4) {
+            // Horizontal
+            if(is_valid_cell(x, y+3) && board[x][y] == s && board[x][y+1] == s && board[x][y+2] == s && board[x][y+3] == s) has_4 = true;
+            // Vertical
+            else if(is_valid_cell(x+3, y) && board[x][y] == s && board[x+1][y] == s && board[x+2][y] == s && board[x+3][y] == s) has_4 = true;
+            // Diagonal Down-Right
+            else if(is_valid_cell(x+3, y+3) && board[x][y] == s && board[x+1][y+1] == s && board[x+2][y+2] == s && board[x+3][y+3] == s) has_4 = true;
+            // Diagonal Down-Left
+            else if(is_valid_cell(x+3, y-3) && board[x][y] == s && board[x+1][y-1] == s && board[x+2][y-2] == s && board[x+3][y-3] == s) has_4 = true;
+        }
+        if (has_3 && has_4) return true;
+        }
+    return has_3 && has_4;
+    }
+
+
 //AI smart code
 int DIAMOND_Board::evaluate(char ai, char human) {
-    Player<char> pAI("AI", ai, PlayerType::COMPUTER);
-    Player<char> pHUMAN("HUMAN", human , PlayerType::HUMAN);
 
-    if (is_win(&pAI)) return +10;
-    if (is_win(&pHUMAN)) return -10;
+    if (check_win_fast(ai)) return +10;
+    if (check_win_fast(human)) return -10;
 
     return 0;
 }
 //minimax
-int DIAMOND_Board::minimax(char ai, char human, bool maximizing) {
-    int score = evaluate(ai,human);
+int DIAMOND_Board::minimax(char ai, char human, bool maximizing, int alpha, int beta, int depth) {
+    int score = evaluate(ai, human);
 
-    if (score ==10 || score == -10)
+    // Terminal states (Win/Loss)
+    if (score == 10 || score == -10)
         return score;
 
-    if (n_moves ==13)
-        return 0;
-     if (maximizing) {
-         int best = -1000;
-         for (auto &pos : DIAMOND_CELLS) {
-             int x = pos.first , y = pos.second;
-             if (board[x][y]=='.') {
-                 board[x][y]=ai;
-                 n_moves++;
+    // Terminal state (Draw/Full Board)
+    if (n_moves >= DIAMOND_CELLS.size()) return 0;
+    if (depth <= 0) return 0; //stop recursion here
 
-                 best = max(best, minimax(ai,human,false));
+    if (maximizing) {
+        int best = -1000;
+        for (auto &pos : DIAMOND_CELLS) {
+            int x = pos.first;
+            int y = pos.second;
 
-                 board[x][y]='.';
-                 n_moves--;
-             }
-         }
-         return best;
-     }else {
-         int best = 1000;
-         for (auto &pos : DIAMOND_CELLS) {
-             int x = pos.first , y = pos.second;
-             if (board[x][y]=='.') {
-                 board[x][y]=human;
-                    n_moves++;
+            // Check if cell is empty
+            if (board[x][y] == '.') {
+                board[x][y] = ai;
+                n_moves++;
 
-                 best = min(best, minimax(ai,human,true));
-                 board[x][y]='.';
-                 n_moves--;
-             }
-         }
-         return best;
-     }
+                // Recurse with depth -1
+                best = max(best, minimax(ai, human, false, alpha, beta,-1));
+
+                // Backtrack
+                board[x][y] = '.';
+                n_moves--;
+
+                // Alpha-Beta Pruning
+                alpha = max(alpha, best);
+                if (beta <= alpha) {
+                    break; // Beta cutoff
+                }
+            }
+        }
+        return best;
+    } else {
+        int best = 1000;
+        for (auto &pos : DIAMOND_CELLS) {
+            int x = pos.first;
+            int y = pos.second;
+
+            // Check if cell is empty
+            if (board[x][y] == '.') {
+                board[x][y] = human;
+                n_moves++;
+
+                best = min(best, minimax(ai, human, true, alpha, beta,-1));
+
+                // Backtrack
+                board[x][y] = '.';
+                n_moves--;
+
+                // Alpha-Beta Pruning
+                beta = min(beta, best);
+                if (beta <= alpha) {
+                    break; // Alpha cutoff
+                }
+            }
+        }
+        return best;
+    }
 }
 pair<int,int> DIAMOND_Board::find_best_move(char ai, char human) {
     int bestValue = -1000;
     pair<int,int> bestMove = {-1, -1};
+    int alpha = -1000;
+    int beta = 1000;
+    int MAX_DEPTH = 3;
 
     for (auto &pos : DIAMOND_CELLS) {
-        int x = pos.first , y = pos.second;
-        if (board[x][y]=='.') {
-            board[x][y]=ai;
+        int x = pos.first;
+        int y = pos.second;
+
+        if (board[x][y] == '.') {
+            board[x][y] = ai;
             n_moves++;
 
-            int moveVal = minimax(ai,human,false);
-            board[x][y]='.';
+            // Call minimax with initial alpha-beta limits
+            int moveVal = minimax(ai, human, false, alpha, beta, MAX_DEPTH);
+
+            board[x][y] = '.';
             n_moves--;
 
             if (moveVal > bestValue) {
                 bestValue = moveVal;
                 bestMove = pos;
             }
+            alpha= max(alpha, bestValue);
         }
     }
     return bestMove;
 }
-
 bool DIAMOND_Board::is_win(Player<char>* player) {
    return check_line_of_three(player) && check_line_of_four(player);
 }
@@ -213,32 +282,32 @@ bool DIAMOND_Board::game_is_over(Player<char>* player) {
 bool DIAMOND_UI::is_diamond_position(int x, int y) const {
 //Same diamond positions as in the board
 vector<pair<int, int>> diamond_cells = {
-    {0, 2},
-    {1, 1}, {1, 2}, {1, 3},
-    {2, 0}, {2, 1}, {2, 2}, {2, 3}, {2, 4},
-    {3, 1}, {3, 2}, {3, 3},
-    {4, 2}
+    {0,3},                                   // Row 0 (1 cell)
+        {1,2}, {1,3}, {1,4},                     // Row 1 (3 cells)
+        {2,1}, {2,2}, {2,3}, {2,4}, {2,5},       // Row 2 (5 cells)
+        {3,0}, {3,1}, {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, // Row 3 (7 cells)
+        {4,1}, {4,2}, {4,3}, {4,4}, {4,5},       // Row 4 (5 cells)
+        {5,2}, {5,3}, {5,4},                     // Row 5 (3 cells)
+        {6,3}
 };
   for(const auto& pos : diamond_cells) {
      if (pos.first == x && pos.second == y){
-         return true;
+         return (abs(x-3)+abs(y-3))<=3;
 }
 }
 return false;
 }
 DIAMOND_UI::DIAMOND_UI() : UI<char>("Welcome to Diamond Tic-Tac-Toe", 1) {
-    cout << "    0 1 2 3 4\n";
-    cout << "  0     *\n";
-    cout << "  1   * * *\n";
-    cout << "  2 * * * * *\n";
-    cout << "  3   * * *\n";
-    cout << "  4     *\n";
+    cout << "    0 1 2 3 4 5 6\n";
+    cout << "  0       * \n";
+    cout << "  1     * * * \n";
+    cout << "  2   * * * * * \n";
+    cout << "  3 * * * * * * *\n";
+    cout << "  4   * * * * * \n";
+    cout << "  5     * * * \n";
+    cout << "  6       * \n";
     cout << "(* marks valid positions)\n\n";
 }
-
-DIAMOND_UI::~DIAMOND_UI() {
-}
-
 Player<char>* DIAMOND_UI::create_player(string& name, char symbol, PlayerType type) {
 cout << "Crating" << (type == PlayerType::HUMAN ? "Human" : "Computer") << " Player: " << name << " (" << symbol << ")\n";
 return new Player<char>(name, symbol, type);
@@ -265,10 +334,10 @@ Move<char> *DIAMOND_UI::get_move(Player<char>* player) {
         bool valid_move = false;
         while(!valid_move) {
             cout << player->get_name() << " (" << player->get_symbol() << "), enter your move:\n";
-            cout << "Row(0-4, must be in diamond shape):";
-            x = getChoice(0,4);
-            cout <<"Column(0-4, must be in diamond shape):";
-            y = getChoice(0,4);
+            cout << "Row(0-6, must be in diamond shape):";
+            x = getChoice(0,6);
+            cout <<"Column(0-6, must be in diamond shape):";
+            y = getChoice(0,6);
 
             if (is_diamond_position(x,y)) {
                 valid_move = true;
